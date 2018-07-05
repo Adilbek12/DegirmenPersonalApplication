@@ -1,9 +1,9 @@
 package com.degirmen.degirmenpersonalapplication.db.config;
 
-public interface ConnectionConfig {
-  String url();
+public class ConnectionConfig {
+  public static final String URL = "jdbc:jtds:sqlserver://10.64.0.10";
 
-  String user();
+  public static final String USER = "mobile";
 
-  String password();
+  public static final String PASSWORD = "ct_max_change";
 }

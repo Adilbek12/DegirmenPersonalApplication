@@ -12,23 +12,23 @@
       </option>
       <option name="IMPORT_LAYOUT_TABLE">
         <value>
-          <package name="android" withSubpackages="true" static="false" />
+          <package name="android" static="false" withSubpackages="true" />
           <emptyLine />
-          <package name="com" withSubpackages="true" static="false" />
+          <package name="com" static="false" withSubpackages="true" />
           <emptyLine />
-          <package name="junit" withSubpackages="true" static="false" />
+          <package name="junit" static="false" withSubpackages="true" />
           <emptyLine />
-          <package name="net" withSubpackages="true" static="false" />
+          <package name="net" static="false" withSubpackages="true" />
           <emptyLine />
-          <package name="org" withSubpackages="true" static="false" />
+          <package name="org" static="false" withSubpackages="true" />
           <emptyLine />
-          <package name="java" withSubpackages="true" static="false" />
+          <package name="java" static="false" withSubpackages="true" />
           <emptyLine />
-          <package name="javax" withSubpackages="true" static="false" />
+          <package name="javax" static="false" withSubpackages="true" />
           <emptyLine />
-          <package name="" withSubpackages="true" static="false" />
+          <package name="" static="false" withSubpackages="true" />
           <emptyLine />
-          <package name="" withSubpackages="true" static="true" />
+          <package name="" static="true" withSubpackages="true" />
           <emptyLine />
         </value>
       </option>
@@ -54,8 +54,8 @@
         <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="DeallocMethod" />
       </class>
       <extensions>
-        <pair source="cpp" header="h" fileNamingConvention="NONE" />
-        <pair source="c" header="h" fileNamingConvention="NONE" />
+        <pair fileNamingConvention="NONE" header="h" source="cpp" />
+        <pair fileNamingConvention="NONE" header="h" source="c" />
       </extensions>
     </Objective-C-extensions>
     <XML>
