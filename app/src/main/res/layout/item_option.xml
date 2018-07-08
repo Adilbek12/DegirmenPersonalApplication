@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+
+  <TextView
+    android:id="@+id/tvName"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="12dp"
+    android:text="Test"
+    android:textColor="@color/colorPrimaryDark"
+    android:textSize="18sp"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toBottomOf="@id/tvPrice"
+    app:layout_constraintEnd_toStartOf="@id/stepper"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.4" />
+
+  <TextView
+    android:id="@+id/tvPrice"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="20dp"
+    android:paddingBottom="10dp"
+    android:text="300$"
+    android:textColor="@color/colorPrimaryDark"
+    android:textSize="16sp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tvName"
+    app:layout_constraintVertical_bias="0.6" />
+
+  <com.bigkoo.snappingstepper.SnappingStepper
+    android:id="@+id/stepper"
+    android:layout_width="80dp"
+    android:layout_height="30dp"
+    android:layout_marginEnd="30dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toStartOf="@id/buttonAdd"
+    app:layout_constraintTop_toTopOf="parent"></com.bigkoo.snappingstepper.SnappingStepper>
+
+  <ImageButton
+    android:id="@+id/buttonAdd"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_marginEnd="8dp"
+    android:background="@null"
+    android:scaleType="centerCrop"
+    android:src="@drawable/ic_add"
+    android:text="300$"
+    android:textColor="#000"
+    android:textSize="18sp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

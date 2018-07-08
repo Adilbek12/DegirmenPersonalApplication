@@ -11,16 +11,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDao {
+public class AuthDao {
+
   private Connection connection;
 
-  public UserDao(Connection connection) {
+  public AuthDao(Connection connection) {
     this.connection = connection;
   }
 
   public List<User> getUsers() {
     //language=SQLExpress
-    return getUsers("SELECT * FROM [User]");
+    return getUsers("SELECT * FROM [User] WHERE LEN(Password)>0");
   }
 
   private User fromRs(ResultSet rs) throws SQLException {
@@ -31,15 +32,27 @@ public class UserDao {
     return user;
   }
 
-  protected List<User> getUsers(String sql) {
+  private List<User> getUsers(String sql) {
     List<User> users = new ArrayList<>();
     try (PreparedStatement ps = connection.prepareStatement(sql)) {
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) users.add(fromRs(rs));
       }
     } catch (SQLException e) {
-      Log.e(e.getMessage(), UserDao.class.getName());
+      Log.e(e.getMessage(), AuthDao.class.getName());
     }
     return users;
+  }
+
+  public User getUser(String userName, String password) throws SQLException {
+    User user = null;
+    try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM [User] WHERE Name=? AND Password=? AND LEN(Password)>0")) {
+      ps.setObject(1, userName);
+      ps.setObject(2, password);
+      try (ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) user = fromRs(rs);
+      }
+    }
+    return user;
   }
 }

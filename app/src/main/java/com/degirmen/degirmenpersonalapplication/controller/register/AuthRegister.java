@@ -4,8 +4,10 @@ import com.degirmen.degirmenpersonalapplication.controller.model.User;
 
 import java.util.List;
 
-public interface UserRegister {
+public interface AuthRegister {
 
   List<User> getUsers();
+
+  User auth(String user, String password);
 
 }
