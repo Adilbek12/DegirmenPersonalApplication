@@ -22,12 +22,12 @@ public class AuthRegisterImpl extends Register implements AuthRegister {
 
   @Override
   public void getUsers(Callback<List<User>> users) {
-    start(() -> users.doSomething(authDao.getUsers()));
+    async(() -> users.doSomething(authDao.getUsers()));
   }
 
   @Override
   public void auth(String userName, String password, Callback<User> userCallback) {
-    start(() -> {
+    async(() -> {
       try {
         userCallback.doSomething(authDao.getUser(userName, password));
       } catch (SQLException e) {

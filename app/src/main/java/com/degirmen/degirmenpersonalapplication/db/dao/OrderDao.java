@@ -26,12 +26,14 @@ public class OrderDao {
     return "";//FIXME
   }
 
-  private void exec(String sql, List<Object> params) {
+  private boolean exec(String sql, List<Object> params) {
     try (PreparedStatement statement = connection.prepareStatement(sql)) {
       setParam(statement, params);
       statement.execute();
+      return true;
     } catch (SQLException e) {
       Log.e(OrderDao.class.getName(), e.getMessage());
+      return false;
     }
   }
 

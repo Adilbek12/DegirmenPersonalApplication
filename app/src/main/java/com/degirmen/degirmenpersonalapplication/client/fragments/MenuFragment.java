@@ -60,6 +60,7 @@ public class MenuFragment extends Fragment {
 
     //FIXME: NEED INDICATOR
     register.getProductCategory(getProductType().get(position), categories -> {
+      this.categories = categories;
       adapter = new MenuAdapter(getActivity(), categories);
       menuListView.setAdapter(adapter);
     });
@@ -71,6 +72,8 @@ public class MenuFragment extends Fragment {
     generalCategories.add(new ProductType(2));
     generalCategories.add(new ProductType(3));
     generalCategories.add(new ProductType(5));
+    generalCategories.add(new ProductType(6));
+    generalCategories.add(new ProductType(7));
     return generalCategories;
   }
 

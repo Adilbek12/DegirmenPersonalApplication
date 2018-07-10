@@ -25,12 +25,12 @@ public class ProductRegisterImpl extends Register implements ProductRegister {
 
   @Override
   public void getProductTypeList(Callback<List<ProductType>> callback) {
-    start(() -> callback.doSomething(getProductType()));
+    async(() -> callback.doSomething(getProductType()));
   }
 
   @Override
   public void getProductCategory(ProductType gc, Callback<List<ProductCategory>> callback) {
-    start(() -> {
+    async(() -> {
       try {
         callback.doSomething(productDao.getSubCategoryList(gc.root));
       } catch (SQLException e) {
@@ -42,7 +42,7 @@ public class ProductRegisterImpl extends Register implements ProductRegister {
 
   @Override
   public void getProductList(Integer id, Callback<List<Product>> callback) {
-    start(() -> {
+    async(() -> {
       try {
         callback.doSomething(productDao.getProductList(id));
       } catch (SQLException e) {
@@ -54,7 +54,7 @@ public class ProductRegisterImpl extends Register implements ProductRegister {
 
   @Override
   public void searchProduct(String name, Callback<List<Product>> callback) {
-    start(() -> {
+    async(() -> {
       try {
         callback.doSomething(productDao.searchProduct(name));
       } catch (SQLException e) {

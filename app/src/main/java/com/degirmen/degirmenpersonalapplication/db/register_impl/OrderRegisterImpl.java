@@ -7,6 +7,7 @@ import com.degirmen.degirmenpersonalapplication.controller.register.OrderRegiste
 import com.degirmen.degirmenpersonalapplication.controller.register.Register;
 import com.degirmen.degirmenpersonalapplication.controller.util.Callback;
 import com.degirmen.degirmenpersonalapplication.db.dao.OrderDao;
+import com.degirmen.degirmenpersonalapplication.db.util.ConnectionUtil;
 
 import java.util.List;
 
@@ -14,18 +15,17 @@ public class OrderRegisterImpl extends Register implements OrderRegister {
 
   private OrderDao orderDao;
 
-  public OrderRegisterImpl(OrderDao orderDao) {
-    this.orderDao = orderDao;
+  public OrderRegisterImpl() {
+    this.orderDao = new OrderDao(new ConnectionUtil().getConnection());
   }
-
 
   @Override
   public void toOrder(Order order, User forUser, Callback<Boolean> callback) {
-    start(() -> callback.doSomething(orderDao.toOrder(order, forUser.id)));
+    async(() -> callback.doSomething(orderDao.toOrder(order, forUser.id)));
   }
 
   @Override
   public void getOrders(User user, Callback<List<ProductOrder>> callback) {
-    start(() -> callback.doSomething(orderDao.getOrders()));
+    async(() -> callback.doSomething(orderDao.getOrders()));
   }
 }

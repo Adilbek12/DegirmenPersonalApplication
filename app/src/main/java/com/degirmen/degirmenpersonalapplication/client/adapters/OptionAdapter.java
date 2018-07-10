@@ -50,6 +50,8 @@ public class OptionAdapter extends ArrayAdapter<ProductOrder> {
       Log.d(TAG, "getView: 2");
       buttonAdd.setImageResource(R.drawable.ic_remove);
       buttonAdd.setTag("remove");
+      Log.d(TAG, "getView: " + productOrder.count);
+      stepper.setValue(productOrder.count);
     }
     Log.d(TAG, "getView: 3");
 

@@ -2,11 +2,13 @@ package com.degirmen.degirmenpersonalapplication.client.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 import com.degirmen.degirmenpersonalapplication.controller.model.User;
 import com.degirmen.degirmenpersonalapplication.controller.register.AuthRegister;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
@@ -24,12 +27,16 @@ public class LoginActivity extends AppCompatActivity {
   private EditText passwordEditText;
 
   private AuthRegister userRegister;
+  private ProgressBar progressBar;
+  private List<User> userList;
+  private ArrayAdapter<String> adapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
 
+    progressBar = findViewById(R.id.progressBar);
     userRegister = RegisterController.getInstance().getAuthRegister();
 
     initInputText();
@@ -47,12 +54,15 @@ public class LoginActivity extends AppCompatActivity {
     nameAuthCompleteTextView = findViewById(R.id.name_auth_complete_text_view);
     passwordEditText = findViewById(R.id.password_edit_text);
     passwordEditText.setOnEditorActionListener(getOnEditorActionListener());
+    adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
 
-
-    //FIXME INDICATOR NUZHEN
+    progressBar.setVisibility(View.VISIBLE);
     userRegister.getUsers(userList -> {
-      nameAuthCompleteTextView.setAdapter(getNameAdapter(userList));
+      adapter = getNameAdapter(userList);
+
     });
+    nameAuthCompleteTextView.setAdapter(adapter);
+    progressBar.setVisibility(View.GONE);
   }
 
 
@@ -86,13 +96,14 @@ public class LoginActivity extends AppCompatActivity {
     String name = nameAuthCompleteTextView.getText().toString();
     String password = passwordEditText.getText().toString();
 
-    //FIXME INDICATOR NUZHEN
     userRegister.auth(name, password, user -> {
       if (user == null) {
         alertWrongMessage();
+        progressBar.setVisibility(View.GONE);
       } else {
         Singleton.getInstance().saveUser(user);
         intentToNextActivity();
+        progressBar.setVisibility(View.GONE);
       }
     });
   }
