@@ -30,7 +30,7 @@ public class ProductDao {
   }
 
   private String getSubCategoryList() {
-    return "SELECT * FROM Category WHERE Type=? AND Visible=1 AND IsProduct=0 AND Name IS NOT NULL;";
+    return "SELECT ID, Name, Parent FROM Category WHERE Type=? AND Visible=1 AND IsProduct=0 AND Name IS NOT NULL ORDER BY Name;";
   }
 
   private ProductCategory subCategoryFromRs(ResultSet rs) throws SQLException {
@@ -53,7 +53,7 @@ public class ProductDao {
   }
 
   private String getProductListQuery() {
-    return "SELECT * FROM Category WHERE IsProduct=1 AND Visible=1 AND Parent=?";
+    return "SELECT ID, Name, Parent, Price FROM Category WHERE IsProduct=1 AND Visible=1 AND Parent=? ORDER BY Name";
   }
 
   private String firstUpperCased(String input) {
@@ -71,12 +71,16 @@ public class ProductDao {
 
   public List<Product> searchProduct(String name) throws SQLException {
     List<Product> products = new ArrayList<>();
-    try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM Category WHERE Name=? AND Visible=1 AND IsProduct=0 AND Name IS NOT NULL")) {
+    try (PreparedStatement ps = connection.prepareStatement(getSearchProductQuery())) {
       ps.setObject(1, name + "%");
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) products.add(productFromRs(rs));
       }
     }
     return products;
+  }
+
+  public String getSearchProductQuery() {
+    return "SELECT ID, Name, Parent, Price FROM Category WHERE Name=? AND Visible=1 AND IsProduct=0 AND Name IS NOT NULL ORDER BY Name";
   }
 }

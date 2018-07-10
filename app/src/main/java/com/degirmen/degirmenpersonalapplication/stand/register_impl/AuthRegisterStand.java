@@ -2,6 +2,7 @@ package com.degirmen.degirmenpersonalapplication.stand.register_impl;
 
 import com.degirmen.degirmenpersonalapplication.controller.model.User;
 import com.degirmen.degirmenpersonalapplication.controller.register.AuthRegister;
+import com.degirmen.degirmenpersonalapplication.controller.util.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +10,8 @@ import java.util.List;
 public class AuthRegisterStand implements AuthRegister {
 
   @Override
-  public List<User> getUsers() {
-    return getUsersList();
+  public void getUsers(Callback<List<User>> callback) {
+    callback.doSomething(getUsersList());
   }
 
   private List<User> getUsersList() {
@@ -27,10 +28,11 @@ public class AuthRegisterStand implements AuthRegister {
   }
 
   @Override
-  public User auth(String user, String password) {
-    if (user.equals("ELDOR 1") && password.equals("CHERT")) {
-      return new User(1, 1, "ELDOR 1");
+  public void auth(String userName, String password, Callback<User> userCallback) {
+    if (userName.equals("ELDOR 1") && password.equals("123")) {
+      userCallback.doSomething(new User(1, 1, "ELDOR 1"));
+    } else {
+      userCallback.doSomething(null);
     }
-    return null;
   }
 }

@@ -3,15 +3,16 @@ package com.degirmen.degirmenpersonalapplication.controller.register;
 import com.degirmen.degirmenpersonalapplication.controller.model.Product;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductCategory;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductType;
+import com.degirmen.degirmenpersonalapplication.controller.util.Callback;
 
 import java.util.List;
 
 public interface ProductRegister {
-  List<ProductType> getProductTypeList();
+  void getProductTypeList(Callback<List<ProductType>> callback);
 
-  List<ProductCategory> getProductCategory(ProductType gc);
+  void getProductCategory(ProductType gc, Callback<List<ProductCategory>> callback);
 
-  List<Product> getProductList(Integer id);
+  void getProductList(Integer id, Callback<List<Product>> callback);
 
-  List<Product> searchProduct(String name);
+  void searchProduct(String name, Callback<List<Product>> callback);
 }

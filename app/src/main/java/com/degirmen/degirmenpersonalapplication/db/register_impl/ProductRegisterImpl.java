@@ -6,6 +6,8 @@ import com.degirmen.degirmenpersonalapplication.controller.model.Product;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductCategory;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductType;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
+import com.degirmen.degirmenpersonalapplication.controller.register.Register;
+import com.degirmen.degirmenpersonalapplication.controller.util.Callback;
 import com.degirmen.degirmenpersonalapplication.db.dao.ProductDao;
 import com.degirmen.degirmenpersonalapplication.db.util.ConnectionUtil;
 
@@ -13,47 +15,53 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductRegisterImpl implements ProductRegister {
+public class ProductRegisterImpl extends Register implements ProductRegister {
 
   private ProductDao productDao;
 
   public ProductRegisterImpl() {
-    this.productDao = new ProductDao(ConnectionUtil.createConnection());
+    this.productDao = new ProductDao(new ConnectionUtil().getConnection());
   }
 
   @Override
-  public List<ProductType> getProductTypeList() {
-    return getProductType();
+  public void getProductTypeList(Callback<List<ProductType>> callback) {
+    start(() -> callback.doSomething(getProductType()));
   }
 
   @Override
-  public List<ProductCategory> getProductCategory(ProductType gc) {
-    try {
-      return productDao.getSubCategoryList(gc.root);
-    } catch (SQLException e) {
-      Log.e(e.getMessage(), ProductRegisterImpl.class.getName());
-    }
-    return null;
+  public void getProductCategory(ProductType gc, Callback<List<ProductCategory>> callback) {
+    start(() -> {
+      try {
+        callback.doSomething(productDao.getSubCategoryList(gc.root));
+      } catch (SQLException e) {
+        callback.doSomething(null);
+        Log.e(ProductRegisterImpl.class.getName(), e.getMessage());
+      }
+    });
   }
 
   @Override
-  public List<Product> getProductList(Integer id) {
-    try {
-      return productDao.getProductList(id);
-    } catch (SQLException e) {
-      Log.e(e.getMessage(), ProductRegisterImpl.class.getName());
-    }
-    return null;
+  public void getProductList(Integer id, Callback<List<Product>> callback) {
+    start(() -> {
+      try {
+        callback.doSomething(productDao.getProductList(id));
+      } catch (SQLException e) {
+        callback.doSomething(null);
+        Log.e(ProductRegisterImpl.class.getName(), e.getMessage());
+      }
+    });
   }
 
   @Override
-  public List<Product> searchProduct(String name) {
-    try {
-      return productDao.searchProduct(name);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return null;
+  public void searchProduct(String name, Callback<List<Product>> callback) {
+    start(() -> {
+      try {
+        callback.doSomething(productDao.searchProduct(name));
+      } catch (SQLException e) {
+        callback.doSomething(null);
+        Log.e(ProductRegisterImpl.class.getName(), e.getMessage());
+      }
+    });
   }
 
   private List<ProductType> getProductType() {
@@ -62,8 +70,6 @@ public class ProductRegisterImpl implements ProductRegister {
     generalCategories.add(new ProductType(2));
     generalCategories.add(new ProductType(3));
     generalCategories.add(new ProductType(5));
-    generalCategories.add(new ProductType(6));
-    generalCategories.add(new ProductType(7));
     return generalCategories;
   }
 }

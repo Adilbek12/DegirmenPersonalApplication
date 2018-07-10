@@ -20,7 +20,6 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-
     <activity android:name=".client.activities.OptionActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
@@ -29,7 +28,7 @@
     <activity android:name=".client.activities.SearchActivity" />
     <activity android:name=".client.activities.OrderActivity" />
     <activity android:name=".client.activities.MenuActivity" />
-
+    <activity android:name=".client.activities.SettingActivity"></activity>
   </application>
 
 </manifest>

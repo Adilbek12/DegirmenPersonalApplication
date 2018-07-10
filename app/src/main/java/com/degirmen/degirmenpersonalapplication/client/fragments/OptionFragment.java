@@ -11,9 +11,10 @@ import android.widget.ListView;
 
 import com.degirmen.degirmenpersonalapplication.R;
 import com.degirmen.degirmenpersonalapplication.client.adapters.OptionAdapter;
+import com.degirmen.degirmenpersonalapplication.controller.controller.RegisterController;
+import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrder;
 import com.degirmen.degirmenpersonalapplication.controller.model.Product;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
-import com.degirmen.degirmenpersonalapplication.db.register_impl.ProductRegisterImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,6 @@ public class OptionFragment extends Fragment {
   public OptionFragment() {
   }
 
-  private List<Product> products;
   private View view;
 
   @Override
@@ -39,25 +39,24 @@ public class OptionFragment extends Fragment {
     super.onActivityCreated(savedInstanceState);
     try {
       categoryId = getActivity().getIntent().getExtras().getInt("id");
+      Log.d(TAG, "onActivityCreated: id = " + categoryId);
       initAll();
+    } catch (NullPointerException e) {
     }
-    catch (NullPointerException e){
-      Log.e(TAG, "onActivityCreated: ", e);
-    }
-    Log.d(TAG, "onActivityCreated: id = " + categoryId);
   }
 
   private void initAll() {
     ListView optionListView = view.findViewById(R.id.optionListView);
-    fillArray();
-    OptionAdapter adapter = new OptionAdapter(getActivity(), products);
-    optionListView.setAdapter(adapter);
-  }
+    ProductRegister register = RegisterController.getInstance().getProductRegister();
 
-  private void fillArray() {
-    ProductRegister register = new ProductRegisterImpl();
-    products = new ArrayList<>();
-    products = register.getProductList(categoryId);
+    //FIXME: NEED INDICATOR
+    register.getProductList(categoryId, products -> {
+      List<ProductOrder> productOrders = new ArrayList<>();
+      for (Product product : products) {
+        productOrders.add(new ProductOrder(product, 1));
+      }
+      optionListView.setAdapter(new OptionAdapter(getActivity(), productOrders));
+    });
   }
 
   public void setID(int id) {

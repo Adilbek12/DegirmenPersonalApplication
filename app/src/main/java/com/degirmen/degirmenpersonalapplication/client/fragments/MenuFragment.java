@@ -14,10 +14,10 @@ import android.widget.ListView;
 import com.degirmen.degirmenpersonalapplication.R;
 import com.degirmen.degirmenpersonalapplication.client.activities.OptionActivity;
 import com.degirmen.degirmenpersonalapplication.client.adapters.MenuAdapter;
+import com.degirmen.degirmenpersonalapplication.controller.controller.RegisterController;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductCategory;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductType;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
-import com.degirmen.degirmenpersonalapplication.db.register_impl.ProductRegisterImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class MenuFragment extends Fragment {
 
   private ListView menuListView;
   private MenuAdapter adapter;
-  private List<ProductCategory> categories;
+  private List<ProductCategory> categories = new ArrayList<>();
   private View view;
 
   @Override
@@ -56,26 +56,21 @@ public class MenuFragment extends Fragment {
 
   private void initAll() {
     menuListView = view.findViewById(R.id.menuListView);
-    fillArray();
-    adapter = new MenuAdapter(getActivity(), categories);
-    menuListView.setAdapter(adapter);
+    ProductRegister register = RegisterController.getInstance().getProductRegister();
+
+    //FIXME: NEED INDICATOR
+    register.getProductCategory(getProductType().get(position), categories -> {
+      adapter = new MenuAdapter(getActivity(), categories);
+      menuListView.setAdapter(adapter);
+    });
   }
 
-  private void fillArray() {
-    categories = new ArrayList<>();
-    ProductRegister stand = new ProductRegisterImpl();
-    List<ProductType> types = getProductTypeList();
-    categories = stand.getProductCategory(types.get(position));
-  }
-
-  private List<ProductType> getProductTypeList() {
+  private List<ProductType> getProductType() {
     List<ProductType> generalCategories = new ArrayList<>();
     generalCategories.add(new ProductType(1));
     generalCategories.add(new ProductType(2));
     generalCategories.add(new ProductType(3));
     generalCategories.add(new ProductType(5));
-    generalCategories.add(new ProductType(6));
-    generalCategories.add(new ProductType(7));
     return generalCategories;
   }
 

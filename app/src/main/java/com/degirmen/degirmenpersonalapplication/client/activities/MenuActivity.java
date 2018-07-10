@@ -9,11 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import com.degirmen.degirmenpersonalapplication.R;
 import com.degirmen.degirmenpersonalapplication.client.adapters.TabPagerAdapter;
 import com.degirmen.degirmenpersonalapplication.client.fragments.MenuFragment;
+import com.degirmen.degirmenpersonalapplication.controller.controller.RegisterController;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductType;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
-import com.degirmen.degirmenpersonalapplication.db.register_impl.ProductRegisterImpl;
-
-import java.util.ArrayList;
 
 
 public class MenuActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener {
@@ -40,7 +38,7 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnFr
 
   private void initImageView() {
     findViewById(R.id.searchImageView).setOnClickListener(v -> intentToClass(SearchActivity.class));
-    findViewById(R.id.orderImageView).setOnClickListener(v -> intentToClass(OptionActivity.class));
+    findViewById(R.id.orderImageView).setOnClickListener(v -> intentToClass(OrderActivity.class));
   }
 
   private void intentToClass(Class cls) {
@@ -55,11 +53,14 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnFr
   }
 
   private void addTabs() {
-    ProductRegister register = new ProductRegisterImpl();
-    ArrayList<ProductType> types = (ArrayList<ProductType>) register.getProductTypeList();
-    for (ProductType type : types) {
-      tabLayout.addTab(tabLayout.newTab().setText(type.root + ""));
-    }
+    ProductRegister register = RegisterController.getInstance().getProductRegister();
+
+    //FIXME NEED INDICatOR
+    register.getProductTypeList(productTypes -> {
+      for (ProductType type : productTypes) {
+        tabLayout.addTab(tabLayout.newTab().setText(type.root + ""));
+      }
+    });
   }
 
   private TabLayout.BaseOnTabSelectedListener getOnSelectedListener() {

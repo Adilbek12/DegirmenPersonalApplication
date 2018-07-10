@@ -1,6 +1,5 @@
 package com.degirmen.degirmenpersonalapplication.controller.util;
 
-public interface Controller {
-  //ASKAR CHERT
-  String test();
+public interface Callback<T> {
+  void doSomething(T obj);
 }

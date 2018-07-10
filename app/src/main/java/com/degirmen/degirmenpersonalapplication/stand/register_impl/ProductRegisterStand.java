@@ -4,32 +4,34 @@ import com.degirmen.degirmenpersonalapplication.controller.model.Product;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductCategory;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductType;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
+import com.degirmen.degirmenpersonalapplication.controller.util.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRegisterStand implements ProductRegister {
+
   @Override
-  public List<ProductType> getProductTypeList() {
-    return getProductType();
+  public void getProductTypeList(Callback<List<ProductType>> callback) {
+    callback.doSomething(getProductType());
   }
 
   @Override
-  public List<ProductCategory> getProductCategory(ProductType gc) {
+  public void getProductCategory(ProductType gc, Callback<List<ProductCategory>> callback) {
     List<ProductCategory> productCategories = new ArrayList<>();
     for (ProductCategory pc : getProductCategoryList())
       if (pc.parent.equals(gc.root)) productCategories.add(pc);
-    return productCategories;
+    callback.doSomething(productCategories);
   }
 
   @Override
-  public List<Product> getProductList(Integer sc) {
-    return getProductList();
+  public void getProductList(Integer sc, Callback<List<Product>> callback) {
+    callback.doSomething(getProductList());
   }
 
   @Override
-  public List<Product> searchProduct(String name) {
-    return null;
+  public void searchProduct(String name, Callback<List<Product>> callback) {
+    callback.doSomething(getProductList());
   }
 
   private List<ProductType> getProductType() {
@@ -68,7 +70,7 @@ public class ProductRegisterStand implements ProductRegister {
 
   private List<Product> getProductList() {
     List<Product> products = new ArrayList<>();
-    for (int j = 0; j < getProductTypeList().size(); j++) {
+    for (int j = 0; j < getProductType().size(); j++) {
       for (int i = 1; i <= 10; i++) {
         products.add(new Product(i, getProductCategoryList().get(j).id, "fdsfsfsd", 123));
       }

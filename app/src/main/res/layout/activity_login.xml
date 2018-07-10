@@ -29,8 +29,8 @@
     app:layout_constraintTop_toTopOf="parent"
     tools:ignore="VectorDrawableCompat" />
 
-  <EditText
-    android:id="@+id/name_edit_text"
+  <AutoCompleteTextView
+    android:id="@+id/name_auth_complete_text_view"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_alignStart="@+id/password_edit_text"
@@ -40,7 +40,7 @@
     android:layout_marginTop="40dp"
     android:backgroundTint="@color/colorPrimaryDark"
     android:ems="10"
-    android:hint="Name"
+    android:hint="@string/name_hint"
     android:inputType="textPersonName"
     android:padding="10dp"
     android:textColor="@color/colorPrimaryDark"
@@ -54,20 +54,20 @@
     android:id="@+id/password_edit_text"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_alignTop="@+id/name_edit_text"
+    android:layout_alignTop="@+id/name_auth_complete_text_view"
     android:layout_centerHorizontal="true"
     android:layout_marginTop="8dp"
     android:backgroundTint="@color/colorPrimaryDark"
     android:ems="10"
-    android:hint="Password"
+    android:hint="@string/password_hint"
     android:inputType="textPassword"
     android:padding="10dp"
     android:textColor="@color/colorPrimaryDark"
     android:textColorHint="@color/colorPrimaryDark"
     android:textSize="20dp"
-    app:layout_constraintEnd_toEndOf="@+id/name_edit_text"
-    app:layout_constraintStart_toStartOf="@+id/name_edit_text"
-    app:layout_constraintTop_toBottomOf="@+id/name_edit_text" />
+    app:layout_constraintEnd_toEndOf="@+id/name_auth_complete_text_view"
+    app:layout_constraintStart_toStartOf="@+id/name_auth_complete_text_view"
+    app:layout_constraintTop_toBottomOf="@+id/name_auth_complete_text_view" />
 
   <ImageButton
     android:id="@+id/setting_button"
@@ -88,7 +88,7 @@
     android:layout_marginTop="8dp"
     android:backgroundTint="@color/colorPrimaryDark"
     android:onClick="buttonClicked"
-    android:text="Sign in"
+    android:text="Войти"
     android:textColor="@android:color/white"
     android:textStyle="bold"
     app:layout_constraintEnd_toEndOf="@+id/password_edit_text"

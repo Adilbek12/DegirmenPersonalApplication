@@ -1,33 +1,39 @@
 package com.degirmen.degirmenpersonalapplication.db.register_impl;
 
+import android.util.Log;
+
 import com.degirmen.degirmenpersonalapplication.controller.model.User;
 import com.degirmen.degirmenpersonalapplication.controller.register.AuthRegister;
+import com.degirmen.degirmenpersonalapplication.controller.register.Register;
+import com.degirmen.degirmenpersonalapplication.controller.util.Callback;
 import com.degirmen.degirmenpersonalapplication.db.dao.AuthDao;
 import com.degirmen.degirmenpersonalapplication.db.util.ConnectionUtil;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class AuthRegisterImpl implements AuthRegister {
+public class AuthRegisterImpl extends Register implements AuthRegister {
 
   private AuthDao authDao;
 
   public AuthRegisterImpl() {
-    this.authDao = new AuthDao(ConnectionUtil.createConnection());
+    this.authDao = new AuthDao(new ConnectionUtil().getConnection());
   }
 
   @Override
-  public List<User> getUsers() {
-    return authDao.getUsers();
+  public void getUsers(Callback<List<User>> users) {
+    start(() -> users.doSomething(authDao.getUsers()));
   }
 
   @Override
-  public User auth(String user, String password) {
-    try {
-      return authDao.getUser(user, password);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return null;
+  public void auth(String userName, String password, Callback<User> userCallback) {
+    start(() -> {
+      try {
+        userCallback.doSomething(authDao.getUser(userName, password));
+      } catch (SQLException e) {
+        userCallback.doSomething(null);
+        Log.e(AuthRegisterImpl.class.getName(), e.getMessage());
+      }
+    });
   }
 }
