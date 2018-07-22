@@ -12,73 +12,68 @@ import android.widget.ListView;
 import com.degirmen.degirmenpersonalapplication.R;
 import com.degirmen.degirmenpersonalapplication.client.adapters.OptionAdapter;
 import com.degirmen.degirmenpersonalapplication.controller.controller.RegisterController;
-import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrder;
 import com.degirmen.degirmenpersonalapplication.controller.model.Product;
+import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrder;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
-  private static final String TAG = "SearchActivity";
-  private Toolbar toolbar;
-  private EditText searchEditText;
 
-  private ListView searchListView;
   private OptionAdapter adapter;
-  private ArrayList<ProductOrder> products;
+  private List<ProductOrder> products;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_search);
+
     initToolbar();
-    initSearch();
     initSearchListView();
+    initSearch();
   }
 
   private void initSearchListView() {
-    searchListView = findViewById(R.id.searchListView);
+    ListView searchListView = findViewById(R.id.searchListView);
     products = new ArrayList<>();
+
     adapter = new OptionAdapter(this, products);
     searchListView.setAdapter(adapter);
   }
 
   private void initSearch() {
-    searchEditText = findViewById(R.id.searchEditText);
+    EditText searchEditText = findViewById(R.id.searchEditText);
     searchEditText.addTextChangedListener(new TextWatcher() {
       @Override
-      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-      }
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
       @Override
-      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-      }
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
       @Override
       public void afterTextChanged(Editable s) {
-        searchTextDidChanged(s.toString());
+        if (!s.toString().isEmpty()) searchTextDidChanged(s.toString());
       }
     });
   }
 
   private void searchTextDidChanged(String text) {
-    Log.d(TAG, "afterTextChanged: " + text);
     ProductRegister register = RegisterController.getInstance().getProductRegister();
+    register.searchProduct(text, this::setResult);
+  }
 
-    //FIXME INDICATOR
-    register.searchProduct(text, list -> {
-      for (Product product : list) {
-        ProductOrder productOrder = new ProductOrder(product, 1);
-        products.add(productOrder);
-      }
-      adapter.notifyDataSetChanged();
+  private void setResult(List<Product> list) {
+    runOnUiThread(() -> {
+      products.clear();
+      for (Product product : list) this.products.add(new ProductOrder(product, 1));
+      this.adapter.notifyDataSetChanged();
     });
   }
 
+
   private void initToolbar() {
-    toolbar = findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     setDisplayHomeAsUpEnabled();
     toolbar.setNavigationOnClickListener(v -> finish());
@@ -86,7 +81,7 @@ public class SearchActivity extends AppCompatActivity {
 
   private void setDisplayHomeAsUpEnabled() {
     try {
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     } catch (NullPointerException e) {
       Log.e(OrderActivity.class.getName(), e.getMessage());
     }

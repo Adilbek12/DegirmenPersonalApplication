@@ -28,7 +28,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="10dp"
-                android:src="@drawable/ic_search"
+                android:src="@drawable/ic_search_white"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -75,7 +75,5 @@
             android:id="@+id/optionFragment"/>
 
     </LinearLayout>
-
-
 
 </LinearLayout>

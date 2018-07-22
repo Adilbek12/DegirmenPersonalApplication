@@ -1,38 +1,55 @@
 package com.degirmen.degirmenpersonalapplication.db.register_impl;
 
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import com.degirmen.degirmenpersonalapplication.controller.model.User;
+import com.degirmen.degirmenpersonalapplication.controller.model.UserCopy;
 import com.degirmen.degirmenpersonalapplication.controller.register.AuthRegister;
-import com.degirmen.degirmenpersonalapplication.controller.register.Register;
+import com.degirmen.degirmenpersonalapplication.controller.service.JsonService;
+import com.degirmen.degirmenpersonalapplication.controller.service.JsonServiceGenerator;
 import com.degirmen.degirmenpersonalapplication.controller.util.Callback;
-import com.degirmen.degirmenpersonalapplication.db.dao.AuthDao;
-import com.degirmen.degirmenpersonalapplication.db.util.ConnectionUtil;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class AuthRegisterImpl extends Register implements AuthRegister {
+import retrofit2.Call;
+import retrofit2.Response;
 
-  private AuthDao authDao;
+public class AuthRegisterImpl implements AuthRegister {
 
-  public AuthRegisterImpl() {
-    this.authDao = new AuthDao(new ConnectionUtil().getConnection());
+  @Override
+  public void getUsers(Callback<List<User>> callback) {
+    getUserCopyList(usersCopy -> {
+      List<User> users = new ArrayList<>();
+      for (UserCopy userCopy : usersCopy)
+        users.add(new User(Integer.parseInt(userCopy.id), userCopy.name));
+      callback.doSomething(users);
+    });
   }
 
   @Override
-  public void getUsers(Callback<List<User>> users) {
-    async(() -> users.doSomething(authDao.getUsers()));
+  public void auth(String userName, String password, Callback<User> callback) {
+    getUserCopyList(usersCopy -> {
+      for (UserCopy userCopy : usersCopy)
+        if (userCopy.name.equals(userName) && userCopy.password.equals(password)) {
+          callback.doSomething(new User(Integer.parseInt(userCopy.id), userCopy.name));
+          break;
+        }
+    });
   }
 
-  @Override
-  public void auth(String userName, String password, Callback<User> userCallback) {
-    async(() -> {
-      try {
-        userCallback.doSomething(authDao.getUser(userName, password));
-      } catch (SQLException e) {
-        userCallback.doSomething(null);
-        Log.e(AuthRegisterImpl.class.getName(), e.getMessage());
+  private void getUserCopyList(Callback<List<UserCopy>> callback) {
+    JsonService userService = JsonServiceGenerator.createService(JsonService.class);
+    Call<List<UserCopy>> usersCall = userService.getUserList();
+    usersCall.enqueue(new retrofit2.Callback<List<UserCopy>>() {
+      @Override
+      public void onResponse(@NonNull Call<List<UserCopy>> call, @NonNull Response<List<UserCopy>> response) {
+        callback.doSomething(response.body());
+      }
+
+      @Override
+      public void onFailure(@NonNull Call<List<UserCopy>> call, @NonNull Throwable throwable) {
+        callback.doSomething(new ArrayList<>());
       }
     });
   }

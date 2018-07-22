@@ -3,11 +3,11 @@ package com.degirmen.degirmenpersonalapplication.controller.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class OrderCopy {
+public class ProductOrderCopy {
 
     @SerializedName("ID")
     @Expose
-    public String iD;
+    public String id;
     @SerializedName("CategoryID")
     @Expose
     public String categoryID;
@@ -21,10 +21,14 @@ public class OrderCopy {
     @Expose
     public String comments;
 
+    @SerializedName("Name")
+    @Expose
+    public String name;
+
     @Override
     public String toString() {
-        return "OrderCopy{" +
-                "iD='" + iD + '\'' +
+        return "ProductOrderCopy{" +
+                "id='" + id + '\'' +
                 ", categoryID='" + categoryID + '\'' +
                 ", count='" + count + '\'' +
                 ", price='" + price + '\'' +

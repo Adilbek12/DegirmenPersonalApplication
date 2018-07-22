@@ -2,7 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content">
+  android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants">
 
   <TextView
     android:id="@+id/tvName"
@@ -35,21 +36,23 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/tvName"
-    app:layout_constraintVertical_bias="0.6" />
+    app:layout_constraintVertical_bias="0.2" />
 
   <com.bigkoo.snappingstepper.SnappingStepper
     android:id="@+id/stepper"
-    android:layout_width="80dp"
-    android:layout_height="30dp"
+    android:layout_width="90dp"
+    android:layout_height="40dp"
     android:layout_marginEnd="30dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toStartOf="@id/buttonAdd"
-    app:layout_constraintTop_toTopOf="parent"></com.bigkoo.snappingstepper.SnappingStepper>
+    app:layout_constraintTop_toTopOf="parent"
+    app:stepper_background="@color/colorPrimaryDark"
+      />
 
   <ImageButton
     android:id="@+id/buttonAdd"
-    android:layout_width="40dp"
-    android:layout_height="40dp"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
       android:tag="add"
     android:layout_marginEnd="8dp"
     android:background="@null"
@@ -61,6 +64,22 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+      android:id="@+id/tvComment"
+      app:layout_constraintTop_toBottomOf="@id/tvPrice"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      android:textColor="@color/black"
+      android:textStyle="italic"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingBottom="10dp"
+      android:visibility="gone"
+      android:layout_marginStart="20dp"
+      android:layout_marginEnd="20dp"
+      android:textSize="16sp"
+      />
 
 
 </android.support.constraint.ConstraintLayout>

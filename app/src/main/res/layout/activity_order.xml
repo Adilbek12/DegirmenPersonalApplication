@@ -1,47 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/white"
+  android:orientation="vertical"
+  tools:context=".client.activities.OrderActivity">
+
+
+  <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical"
     tools:context=".client.activities.OrderActivity">
 
-  <android.support.v7.widget.Toolbar
-    android:id="@+id/toolbar"
-    style="@style/toolbar">
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      style="@style/toolbar">
 
-    <android.support.constraint.ConstraintLayout
+      <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-      <TextView
+
+        <TextView
           android:id="@+id/orderTV"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginEnd="15dp"
           android:text="Заказать"
           android:textColor="@color/white"
-          app:layout_constraintTop_toTopOf="parent"
+          android:textSize="16sp"
+          android:textStyle="bold"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
-          android:textSize="16sp"
-          android:layout_marginEnd="15dp"
-          android:textStyle="bold"/>
+          app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+      </android.support.constraint.ConstraintLayout>
 
-  </android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>
 
-  <ListView
+    <ListView
       android:id="@+id/orderListView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+      app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
+  </android.support.constraint.ConstraintLayout>
 
+  <include layout="@layout/snippet_progress_bar"/>
 
-
-
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

@@ -1,8 +1,10 @@
 package com.degirmen.degirmenpersonalapplication.controller.register;
 
-/**
- * Created by adilbekmailanov on 11.07.2018.
- */
+import com.degirmen.degirmenpersonalapplication.controller.model.Table;
+import com.degirmen.degirmenpersonalapplication.controller.util.Callback;
+
+import java.util.List;
 
 public interface TableRegister {
+  void getTableList(Callback<List<Table>> callback);
 }

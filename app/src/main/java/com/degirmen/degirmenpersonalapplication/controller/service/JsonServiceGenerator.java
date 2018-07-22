@@ -1,4 +1,4 @@
-package com.degirmen.degirmenpersonalapplication.controller;
+package com.degirmen.degirmenpersonalapplication.controller.service;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

@@ -3,11 +3,11 @@ package com.degirmen.degirmenpersonalapplication.controller.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserJson {
+public class UserCopy {
 
     @SerializedName("ID")
     @Expose
-    public String iD;
+    public String id;
     @SerializedName("Name")
     @Expose
     public String name;
@@ -15,14 +15,14 @@ public class UserJson {
     @Expose
     public String password;
 
-    public UserJson(){
+    public UserCopy(){
 
     }
 
     @Override
     public String toString() {
         return "UserJson{" +
-                "iD='" + iD + '\'' +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 '}';

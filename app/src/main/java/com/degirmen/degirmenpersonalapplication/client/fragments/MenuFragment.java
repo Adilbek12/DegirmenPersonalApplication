@@ -4,16 +4,19 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.degirmen.degirmenpersonalapplication.R;
 import com.degirmen.degirmenpersonalapplication.client.activities.OptionActivity;
 import com.degirmen.degirmenpersonalapplication.client.adapters.MenuAdapter;
+import com.degirmen.degirmenpersonalapplication.client.utils.Common;
 import com.degirmen.degirmenpersonalapplication.controller.controller.RegisterController;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductCategory;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductType;
@@ -21,49 +24,67 @@ import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegis
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class MenuFragment extends Fragment {
-  private static final String TAG = "MenuFragment";
 
   private int position;
+
+  public MenuFragment() {}
 
   @SuppressLint("ValidFragment")
   public MenuFragment(int position) {
     this.position = position;
   }
 
-  public MenuFragment() {
-  }
-
-  public interface OnFragmentInteractionListener {
-    void fragmentChanged(int position);
-  }
-
-
-  private ListView menuListView;
-  private MenuAdapter adapter;
-  private List<ProductCategory> categories = new ArrayList<>();
   private View view;
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    view = inflater.inflate(R.layout.fragment_menu, container, false);
-    initAll();
+  private String titleString;
 
+  private ListView menuListView;
+  private List<ProductCategory> productCategoryList = new ArrayList<>();
+
+  private ProgressBar progressBar;
+  private View darkView;
+
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    view = inflater.inflate(R.layout.fragment_menu, container, false);
+    darkView = view.findViewById(R.id.darkView);
+    progressBar = view.findViewById(R.id.progressBar);
+    initAll();
     return view;
+  }
+
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    if (getActivity() != null) titleString = getActivity().getIntent().getStringExtra("title");
+    menuListView.setOnItemClickListener((adapterView, view, index, l) -> {
+      if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && !Common.isTablet(getActivity()))
+        startActivity(getIntentWithExtra(index));
+      else
+        reloadDbWith(productCategoryList.get(index).id);
+    });
   }
 
   private void initAll() {
     menuListView = view.findViewById(R.id.menuListView);
     ProductRegister register = RegisterController.getInstance().getProductRegister();
+    loading(true);
+    register.getProductCategory(getProductType().get(position), this::setCategoryList);
+  }
 
-    //FIXME: NEED INDICATOR
-    register.getProductCategory(getProductType().get(position), categories -> {
-      this.categories = categories;
-      adapter = new MenuAdapter(getActivity(), categories);
-      menuListView.setAdapter(adapter);
-    });
+  private void setCategoryList(List<ProductCategory> productCategoryList) {
+    if (getActivity() != null)
+      getActivity().runOnUiThread(() -> {
+        loading(false);
+        this.productCategoryList = productCategoryList;
+        MenuAdapter adapter = new MenuAdapter(getActivity(), productCategoryList);
+        menuListView.setAdapter(adapter);
+      });
+    else loading(false);
   }
 
   private List<ProductType> getProductType() {
@@ -77,25 +98,23 @@ public class MenuFragment extends Fragment {
     return generalCategories;
   }
 
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-
-    menuListView.setOnItemClickListener((adapterView, view, index, l) -> {
-      if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-        Intent intent = new Intent(getActivity(), OptionActivity.class);
-        intent.putExtra("id", categories.get(index).id);
-        startActivity(intent);
-      } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        reloadDBWith(categories.get(index).id);
-      }
-    });
+  private void reloadDbWith(int id) {
+    FragmentManager fragmentManager = getFragmentManager();
+    if (fragmentManager != null) {
+      OptionFragment fragment = (OptionFragment) getFragmentManager().findFragmentById(R.id.optionFragment);
+      Objects.requireNonNull(fragment).setId(id);
+    }
   }
 
-  private void reloadDBWith(int id) {
-    OptionFragment fragment = (OptionFragment) getFragmentManager().findFragmentById(R.id.optionFragment);
-    Log.d(TAG, "reloadDBWith: id = " + id);
-    fragment.setID(id);
+  private void loading(boolean l) {
+    darkView.setVisibility(l ? View.VISIBLE : View.GONE);
+    progressBar.setVisibility(l ? View.VISIBLE : View.GONE);
   }
 
+  public Intent getIntentWithExtra(Integer index) {
+    Intent intent = new Intent(getActivity(), OptionActivity.class);
+    intent.putExtra("id", productCategoryList.get(index).id);
+    if (titleString != null) intent.putExtra("title", titleString);
+    return intent;
+  }
 }

@@ -1,6 +1,7 @@
 package com.degirmen.degirmenpersonalapplication.client.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +12,20 @@ import android.widget.TextView;
 import com.bigkoo.snappingstepper.SnappingStepper;
 import com.degirmen.degirmenpersonalapplication.R;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrder;
+import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 
 import java.util.List;
 
+
 public class OrderAdapter extends ArrayAdapter<ProductOrder> {
 
-  public interface OnRemoveListener{
+
+  public interface OnRemoveListener {
     void removeAt(int position);
   }
 
   public OnRemoveListener onRemoveListener;
 
-  private static final String TAG = "OptionAdapter";
   private List<ProductOrder> products;
   private Context context;
 
@@ -32,28 +35,42 @@ public class OrderAdapter extends ArrayAdapter<ProductOrder> {
     this.context = context;
   }
 
-
+  @NonNull
   @Override
-  public View getView(final int position, View convertView, ViewGroup parent) {
-    if (convertView == null) {
+  public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
+    if (convertView == null)
       convertView = LayoutInflater.from(context).inflate(R.layout.item_option, parent, false);
-    }
-    final TextView nameTV = convertView.findViewById(R.id.tvName);
-    TextView tvPrice = convertView.findViewById(R.id.tvPrice);
-    final SnappingStepper stepper = convertView.findViewById(R.id.stepper);
-    final ImageButton buttonAdd = convertView.findViewById(R.id.buttonAdd);
+
+    final TextView nameTextView = convertView.findViewById(R.id.tvName);
+    final TextView priceTextView = convertView.findViewById(R.id.tvPrice);
+    final TextView commentTextView = convertView.findViewById(R.id.tvComment);
+    final SnappingStepper snappingStepper = convertView.findViewById(R.id.stepper);
+    final ImageButton addButton = convertView.findViewById(R.id.buttonAdd);
+
+    snappingStepper.setOnValueChangeListener((view, value) -> {
+      Singleton.getInstance().getAll().get(position).count = value;
+      if (value <= 0) onRemoveListener.removeAt(position);
+    });
 
     ProductOrder productOrder = products.get(position);
 
-    buttonAdd.setImageResource(R.drawable.ic_remove);
-    nameTV.setText(productOrder.product.name);
-    tvPrice.setText(String.format("%d тг", productOrder.product.price));
-    stepper.setValue(productOrder.count);
+    if (productOrder.comment != null && !productOrder.comment.isEmpty()) {
+      commentTextView.setVisibility(View.VISIBLE);
+      commentTextView.setText(productOrder.comment);
+    } else commentTextView.setVisibility(View.GONE);
 
-    buttonAdd.setOnClickListener(view -> {
-      onRemoveListener.removeAt(position);
-    });
+    nameTextView.setText(productOrder.product.name);
+    priceTextView.setText(getPrice(productOrder.product.price));
+
+    snappingStepper.setValue(productOrder.count);
+
+    addButton.setImageResource(R.drawable.ic_remove);
+    addButton.setOnClickListener(view -> onRemoveListener.removeAt(position));
 
     return convertView;
+  }
+
+  private String getPrice(Integer price) {
+    return price + " тг";
   }
 }

@@ -11,4 +11,6 @@ public interface AuthRegister {
 
   void auth(String userName, String password, Callback<User> user);
 
+
+
 }

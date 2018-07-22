@@ -1,18 +1,29 @@
 package com.degirmen.degirmenpersonalapplication.controller.model;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Singleton {
+  private static final String TAG = "Singleton";
 
   private List<ProductOrder> notes;
   private User user;
+  private Context context;
+  private Table table;
 
   private Singleton() {
     this.notes = new ArrayList<>();
+  }
+
+  public Table getTable() {
+    return table;
+  }
+
+  public void saveTable(Table table) {
+    this.table = table;
   }
 
   public static class SingletonHolder {
@@ -23,18 +34,18 @@ public class Singleton {
     return SingletonHolder.HOLDER_INSTANCE;
   }
 
-  public static void addProduct(ProductOrder product) {
+  public void addProduct(ProductOrder product) {
     Singleton.getInstance().notes.add(product);
   }
 
-  public static List<ProductOrder> getAll() {
+  public List<ProductOrder> getAll() {
     return Singleton.getInstance().notes;
   }
 
   public int contains(ProductOrder product) {
     for (int i = 0; i < getInstance().notes.size(); i++) {
-      boolean isContain = isEqual(product.product, getInstance().notes.get(i).product);
-      Log.d(Singleton.class.getName(), "contains: " + isContain);
+      Log.d(TAG, "contains: " + product.product.id + ",   " + getAll().get(i).product);
+      boolean isContain = isEqual(product.product, getAll().get(i).product);
       if (isContain) {
         Log.d(Singleton.class.getName(), "contains: cool");
         return i;
@@ -66,7 +77,14 @@ public class Singleton {
   }
 
   private boolean isEqual(Product p1, Product p2) {
-    return p1.name.equals(p2.name) && Objects.equals(p1.id, p2.id) && Objects.equals(p1.price, p2.price) && Objects.equals(p1.parent, p2.parent);
+    return p1.id.equals(p2.id);
   }
 
+  public Context getContext() {
+    return context;
+  }
+
+  public void saveContext(Context context) {
+    this.context = context;
+  }
 }

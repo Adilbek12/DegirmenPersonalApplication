@@ -2,12 +2,13 @@ package com.degirmen.degirmenpersonalapplication.client.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,66 +19,92 @@ import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 import com.degirmen.degirmenpersonalapplication.controller.model.User;
 import com.degirmen.degirmenpersonalapplication.controller.register.AuthRegister;
 
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements KeyboardVisibilityEventListener {
 
   private AutoCompleteTextView nameAuthCompleteTextView;
   private EditText passwordEditText;
 
-  private AuthRegister userRegister;
   private ProgressBar progressBar;
-  private List<User> userList;
+  private View darkView;
+
+  private AuthRegister userRegister;
   private ArrayAdapter<String> adapter;
+
+  private List<String> userNameList = new ArrayList<>();
+
+  private Button signInButton;
+  private ImageButton settingButton;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
 
+
+    Singleton.getInstance().saveContext(getApplicationContext());
+
+    userRegister = RegisterController.getInstance().getAuthRegister();
+
+    KeyboardVisibilityEvent.setEventListener(this, this);
+
+    darkView = findViewById(R.id.darkView);
     progressBar = findViewById(R.id.progressBar);
+    signInButton = findViewById(R.id.sign_in_button);
+    settingButton = findViewById(R.id.setting_button);
     userRegister = RegisterController.getInstance().getAuthRegister();
 
     initInputText();
   }
 
-  private String[] toSuggester(List<User> users) {
-    String[] array = new String[users.size()];
-    for (int i = 0; i < users.size(); i++) array[i] = users.get(i).name;
+  private List<String> toSuggester(List<User> userList) {
+    List<String> array = new ArrayList<>();
+    for (User user : userList) array.add(user.name);
     return array;
   }
 
 
   private void initInputText() {
-
     nameAuthCompleteTextView = findViewById(R.id.name_auth_complete_text_view);
     passwordEditText = findViewById(R.id.password_edit_text);
     passwordEditText.setOnEditorActionListener(getOnEditorActionListener());
-    adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
-
-    progressBar.setVisibility(View.VISIBLE);
-    userRegister.getUsers(userList -> {
-      adapter = getNameAdapter(userList);
-
-    });
+    adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userNameList);
+    userRegister.getUsers(this::setUserList);
     nameAuthCompleteTextView.setAdapter(adapter);
-    progressBar.setVisibility(View.GONE);
   }
 
+  private void loading(boolean l) {
+    darkView.setVisibility(l ? View.VISIBLE : View.GONE);
+    progressBar.setVisibility(l ? View.VISIBLE : View.GONE);
+    signInButton.setEnabled(!l);
+    passwordEditText.setEnabled(!l);
+    nameAuthCompleteTextView.setEnabled(!l);
+    settingButton.setEnabled(!l);
+  }
 
-  private ArrayAdapter<String> getNameAdapter(List<User> userList) {
-    return new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, toSuggester(userList));
+  private void setUserList(List<User> userList) {
+    runOnUiThread(() -> {
+      userNameList = toSuggester(userList);
+      adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userNameList);
+      nameAuthCompleteTextView.setAdapter(adapter);
+    });
   }
 
   private TextView.OnEditorActionListener getOnEditorActionListener() {
     return (textView, i, keyEvent) -> {
+      loading(true);
       toSignInActivity();
       return true;
     };
   }
 
   public void buttonClicked(View view) {
+    loading(true);
     switch (view.getId()) {
       case R.id.sign_in_button:
         toSignInActivity();
@@ -89,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
   }
 
   private void toSettingActivity() {
+    loading(false);
     startActivity(new Intent(getApplicationContext(), SettingActivity.class));
   }
 
@@ -96,25 +124,29 @@ public class LoginActivity extends AppCompatActivity {
     String name = nameAuthCompleteTextView.getText().toString();
     String password = passwordEditText.getText().toString();
 
-    userRegister.auth(name, password, user -> {
-      if (user == null) {
-        alertWrongMessage();
-        progressBar.setVisibility(View.GONE);
-      } else {
-        Singleton.getInstance().saveUser(user);
-        intentToNextActivity();
-        progressBar.setVisibility(View.GONE);
-      }
-    });
+    userRegister.auth(name, password, user ->
+      runOnUiThread(() -> {
+        loading(false);
+        if (user == null) {
+          alertWrongMessage();
+        } else {
+          Singleton.getInstance().saveUser(user);
+          intentToNextActivity();
+        }
+      })
+    );
   }
 
   private void intentToNextActivity() {
-    startActivity(new Intent(getApplicationContext(), MenuActivity.class));
+    startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
   }
 
   private void alertWrongMessage() {
     Toast.makeText(getApplicationContext(),
       "Неправильный пользователь или пароль!", Toast.LENGTH_SHORT).show();
   }
+
+  @Override
+  public void onVisibilityChanged(boolean isOpen) {}
 }
 

@@ -8,37 +8,46 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.degirmen.degirmenpersonalapplication.R;
 import com.degirmen.degirmenpersonalapplication.client.adapters.TabPagerAdapter;
-import com.degirmen.degirmenpersonalapplication.client.fragments.MenuFragment;
 import com.degirmen.degirmenpersonalapplication.controller.controller.RegisterController;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductType;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
 
 
-public class MenuActivity extends AppCompatActivity implements MenuFragment.OnFragmentInteractionListener {
+public class MenuActivity extends AppCompatActivity {
 
   private TabLayout tabLayout;
   private ViewPager viewPager;
+  private String titleString;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_menu);
 
+    initTitle();
     initTabLayout();
     initImageView();
     initViewPager();
   }
 
+  private void initTitle() {
+    this.titleString = getIntent().getStringExtra("title");
+  }
+
   private void initViewPager() {
     viewPager = findViewById(R.id.viewPager);
-
+    viewPager.setOffscreenPageLimit(2);
     viewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()));
     viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
   }
 
   private void initImageView() {
     findViewById(R.id.searchImageView).setOnClickListener(v -> intentToClass(SearchActivity.class));
-    findViewById(R.id.orderImageView).setOnClickListener(v -> intentToClass(OrderActivity.class));
+    findViewById(R.id.orderImageView).setOnClickListener(view -> {
+      Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+      if (titleString != null) intent.putExtra("title", titleString);
+      startActivity(intent);
+    });
   }
 
   private void intentToClass(Class cls) {
@@ -54,12 +63,9 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnFr
 
   private void addTabs() {
     ProductRegister register = RegisterController.getInstance().getProductRegister();
-
-    //FIXME NEED INDICatOR
     register.getProductTypeList(productTypes -> {
-      for (ProductType type : productTypes) {
-        tabLayout.addTab(tabLayout.newTab().setText(type.root + ""));
-      }
+      for (ProductType type : productTypes)
+        tabLayout.addTab(tabLayout.newTab().setText(String.valueOf(type.root)));
     });
   }
 
@@ -71,18 +77,11 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnFr
       }
 
       @Override
-      public void onTabUnselected(TabLayout.Tab tab) {
-
-      }
+      public void onTabUnselected(TabLayout.Tab tab) {}
 
       @Override
-      public void onTabReselected(TabLayout.Tab tab) {
-
-      }
+      public void onTabReselected(TabLayout.Tab tab) {}
     };
   }
 
-  @Override
-  public void fragmentChanged(int position) {
-  }
 }

@@ -4,12 +4,13 @@ import com.degirmen.degirmenpersonalapplication.controller.model.Product;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductCategory;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductType;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
+import com.degirmen.degirmenpersonalapplication.controller.register.Register;
 import com.degirmen.degirmenpersonalapplication.controller.util.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductRegisterStand implements ProductRegister {
+public class ProductRegisterStand extends Register implements ProductRegister {
 
   @Override
   public void getProductTypeList(Callback<List<ProductType>> callback) {
@@ -18,20 +19,29 @@ public class ProductRegisterStand implements ProductRegister {
 
   @Override
   public void getProductCategory(ProductType gc, Callback<List<ProductCategory>> callback) {
-    List<ProductCategory> productCategories = new ArrayList<>();
-    for (ProductCategory pc : getProductCategoryList())
-      if (pc.parent.equals(gc.root)) productCategories.add(pc);
-    callback.doSomething(productCategories);
+    async(() -> {
+      sleep();
+      List<ProductCategory> productCategories = new ArrayList<>();
+      for (ProductCategory pc : getProductCategoryList())
+        if (pc.parent.equals(gc.root)) productCategories.add(pc);
+      callback.doSomething(productCategories);
+    });
   }
 
   @Override
   public void getProductList(Integer sc, Callback<List<Product>> callback) {
-    callback.doSomething(getProductList());
+    async(() -> {
+      sleep();
+      callback.doSomething(getProductList());
+    });
   }
 
   @Override
   public void searchProduct(String name, Callback<List<Product>> callback) {
-    callback.doSomething(getProductList());
+    async(() -> {
+      sleep();
+      callback.doSomething(getProductList());
+    });
   }
 
   private List<ProductType> getProductType() {
@@ -39,9 +49,6 @@ public class ProductRegisterStand implements ProductRegister {
     generalCategories.add(new ProductType(1));
     generalCategories.add(new ProductType(2));
     generalCategories.add(new ProductType(3));
-    generalCategories.add(new ProductType(5));
-    generalCategories.add(new ProductType(6));
-    generalCategories.add(new ProductType(7));
     return generalCategories;
   }
 

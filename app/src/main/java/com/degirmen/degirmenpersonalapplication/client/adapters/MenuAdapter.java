@@ -26,9 +26,8 @@ public class MenuAdapter extends ArrayAdapter<ProductCategory> {
   @NonNull
   @Override
   public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-    if (convertView == null) {
+    if (convertView == null)
       convertView = LayoutInflater.from(context).inflate(R.layout.item_menu, parent, false);
-    }
 
     ProductCategory category = categories.get(position);
 

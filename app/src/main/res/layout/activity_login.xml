@@ -1,110 +1,118 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@android:color/white"
-  android:gravity="center_horizontal"
-  android:orientation="vertical"
-  tools:context="com.degirmen.degirmenpersonalapplication.client.activities.LoginActivity">
+  android:layout_height="match_parent">
 
-  <View
-      android:id="@+id/view"
+  <com.degirmen.degirmenpersonalapplication.client.utils.KeyboardAwareScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@drawable/gradient_login_background" />
+      android:background="@android:color/white"
+      android:gravity="center_horizontal"
+      android:orientation="vertical"
+      tools:context="com.degirmen.degirmenpersonalapplication.client.activities.LoginActivity">
 
-  <ImageView
-    android:id="@+id/logo_image_view"
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true"
-    android:layout_marginEnd="0dp"
-    android:layout_marginStart="0dp"
-    android:layout_marginTop="0dp"
-    android:padding="20dp"
-    android:src="@drawable/ic_logo"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:ignore="VectorDrawableCompat" />
 
-  <AutoCompleteTextView
-    android:id="@+id/name_auth_complete_text_view"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_alignStart="@+id/password_edit_text"
-    android:layout_below="@+id/logo_image_view"
-    android:layout_marginEnd="60dp"
-    android:layout_marginStart="60dp"
-    android:layout_marginTop="40dp"
-    android:backgroundTint="@color/colorPrimaryDark"
-    android:ems="10"
-    android:hint="@string/name_hint"
-    android:inputType="textPersonName"
-    android:padding="10dp"
-    android:textColor="@color/colorPrimaryDark"
-    android:textColorHint="@color/colorPrimaryDark"
-    android:textSize="20dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/logo_image_view" />
+      <ImageView
+        android:id="@+id/logo_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:padding="20dp"
+        android:src="@drawable/ic_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="VectorDrawableCompat" />
 
-  <EditText
-    android:id="@+id/password_edit_text"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_alignTop="@+id/name_auth_complete_text_view"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="8dp"
-    android:backgroundTint="@color/colorPrimaryDark"
-    android:ems="10"
-    android:hint="@string/password_hint"
-    android:inputType="textPassword"
-    android:padding="10dp"
-    android:textColor="@color/colorPrimaryDark"
-    android:textColorHint="@color/colorPrimaryDark"
-    android:textSize="20dp"
-    app:layout_constraintEnd_toEndOf="@+id/name_auth_complete_text_view"
-    app:layout_constraintStart_toStartOf="@+id/name_auth_complete_text_view"
-    app:layout_constraintTop_toBottomOf="@+id/name_auth_complete_text_view" />
+      <AutoCompleteTextView
+        android:id="@+id/name_auth_complete_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/password_edit_text"
+        android:layout_below="@+id/logo_image_view"
+        android:layout_marginEnd="60dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:ems="10"
+        android:hint="@string/name_hint"
+        android:inputType="textPersonName"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo_image_view" />
 
-  <ImageButton
-    android:id="@+id/setting_button"
-    android:layout_width="50dp"
-    android:layout_height="50dp"
-    android:layout_marginEnd="10dp"
-    android:layout_marginTop="10dp"
-    android:backgroundTint="@color/colorPrimaryDark"
-    android:onClick="buttonClicked"
-    android:src="@drawable/ic_settings"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+      <EditText
+        android:id="@+id/password_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/name_auth_complete_text_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:ems="10"
+        android:hint="@string/password_hint"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/name_auth_complete_text_view"
+        app:layout_constraintStart_toStartOf="@+id/name_auth_complete_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/name_auth_complete_text_view" />
 
-  <Button
-    android:id="@+id/sign_in_button"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:backgroundTint="@color/colorPrimaryDark"
-    android:onClick="buttonClicked"
-    android:text="Войти"
-    android:textColor="@android:color/white"
-    android:textStyle="bold"
-    app:layout_constraintEnd_toEndOf="@+id/password_edit_text"
-    app:layout_constraintStart_toStartOf="@+id/password_edit_text"
-    app:layout_constraintTop_toBottomOf="@+id/password_edit_text" />
+      <ImageButton
+        android:id="@+id/setting_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:onClick="buttonClicked"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-  <ProgressBar
-      android:id="@+id/progressBar"
-      style="?android:attr/progressBarStyle"
-      android:layout_width="100dp"
-      android:layout_height="100dp"
-      android:visibility="gone"
-      app:layout_constraintBottom_toBottomOf="@+id/view"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      <Button
+        android:id="@+id/sign_in_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:onClick="buttonClicked"
+        android:text="Войти"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/password_edit_text"
+        app:layout_constraintStart_toStartOf="@+id/password_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/password_edit_text" />
 
-</android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+  </com.degirmen.degirmenpersonalapplication.client.utils.KeyboardAwareScrollView>
+
+  <include layout="@layout/snippet_progress_bar"/>
+
+</RelativeLayout>
+
+
+
+
+
+
