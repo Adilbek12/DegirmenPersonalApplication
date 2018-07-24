@@ -1,7 +1,7 @@
 package com.degirmen.degirmenpersonalapplication.controller.model;
 
 public class Table {
-  public Integer id;
+  public String id;
   public TableStatus status;
   public String title;
 

@@ -15,6 +15,7 @@ import com.degirmen.degirmenpersonalapplication.controller.controller.RegisterCo
 import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 import com.degirmen.degirmenpersonalapplication.controller.model.Table;
 import com.degirmen.degirmenpersonalapplication.controller.model.TableStatus;
+import com.degirmen.degirmenpersonalapplication.controller.register.OrderRegister;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class MainMenuActivity extends AppCompatActivity implements TableAdapter.
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_menu);
+
 
     darkView = findViewById(R.id.darkView);
     progressBar = findViewById(R.id.progressBar);
@@ -64,6 +66,10 @@ public class MainMenuActivity extends AppCompatActivity implements TableAdapter.
   @Override
   public void tableOnClick(int index) {
     if (tableList.get(index).status == TableStatus.MY || tableList.get(index).status == TableStatus.FREE) {
+      if (tableList.get(index).status == TableStatus.MY) {
+        OrderRegister register = RegisterController.getInstance().getOrderRegister();
+        register.getOrders(Singleton.getInstance().getUser(), Singleton.getInstance().getTable(), productOrders -> Singleton.getInstance().addAllProduct(productOrders));
+      }
       Singleton.getInstance().saveTable(tableList.get(index));
       Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
       intent.putExtra("title", tableList.get(index).title);

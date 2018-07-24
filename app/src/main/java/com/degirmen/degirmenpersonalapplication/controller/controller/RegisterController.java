@@ -15,7 +15,7 @@ import com.degirmen.degirmenpersonalapplication.stand.register_impl.TableRegiste
 
 public class RegisterController {
 
-  private static final boolean START_IMPL = false;
+  private static final boolean START_IMPL = true;
 
   private AuthRegister authRegister;
   private OrderRegister orderRegister;

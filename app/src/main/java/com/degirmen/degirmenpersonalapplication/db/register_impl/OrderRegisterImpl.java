@@ -8,6 +8,8 @@ import com.degirmen.degirmenpersonalapplication.controller.model.OrderCopy;
 import com.degirmen.degirmenpersonalapplication.controller.model.Product;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrder;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrderCopy;
+import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrderStatus;
+import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 import com.degirmen.degirmenpersonalapplication.controller.model.Table;
 import com.degirmen.degirmenpersonalapplication.controller.model.User;
 import com.degirmen.degirmenpersonalapplication.controller.register.OrderRegister;
@@ -34,7 +36,8 @@ public class OrderRegisterImpl implements OrderRegister {
   public void toOrder(Order order, User user, String table, Callback<Boolean> callback) {
     postNewTable(user.id, 1, 2, table, newTableCopy -> {
       Integer zakazId = Integer.valueOf(newTableCopy.id);
-      saveProducts(zakazId, toJsonArray(order.productOrders));
+      for (ProductOrder productOrder : order.productOrders)
+        saveProducts(zakazId, toJsonArray(productOrder));
       printCheck(zakazId, success -> {});
       callback.doSomething(true);
     });
@@ -42,22 +45,29 @@ public class OrderRegisterImpl implements OrderRegister {
 
   private void printCheck(Integer zakazId, Callback<Boolean> callback) {
     JsonService printService = JsonServiceGenerator.createService(JsonService.class);
-    Call<List<NewTableCopy>> printCall = printService.printCehck("print_check", zakazId);
+    Call<List<NewTableCopy>> printCall = printService.printCehck("print_check", zakazId, Singleton.getInstance().counter++);
     printCall.enqueue(new retrofit2.Callback<List<NewTableCopy>>() {
       @Override
       public void onResponse(@NonNull Call<List<NewTableCopy>> call, @NonNull Response<List<NewTableCopy>> response) {
         if (response.body() != null) {
           callback.doSomething(!response.body().isEmpty());
+          printCall.cancel();
         } else {
           callback.doSomething(false);
+          printCall.cancel();
         }
       }
 
       @Override
       public void onFailure(@NonNull Call<List<NewTableCopy>> call, @NonNull Throwable throwable) {
         callback.doSomething(false);
+        printCall.cancel();
       }
     });
+  }
+
+  private JsonArray toJsonArray(ProductOrder productOrder) {
+    return toJsonArray(new ArrayList<ProductOrder>() {{add(productOrder);}});
   }
 
   private JsonArray toJsonArray(List<ProductOrder> productOrderList) {
@@ -100,21 +110,24 @@ public class OrderRegisterImpl implements OrderRegister {
 
   private void postNewTable(Integer userId, Integer clientCount, Integer tarif, String table, Callback<NewTableCopy> callback) {
     JsonService newTableService = JsonServiceGenerator.createService(JsonService.class);
-    Call<List<NewTableCopy>> newTableCall = newTableService.newTable("new_zakaz", userId, clientCount, tarif, table);
+    Call<List<NewTableCopy>> newTableCall = newTableService.newTable("new_zakaz", userId, clientCount, tarif, table, Singleton.getInstance().counter++);
     newTableCall.enqueue(new retrofit2.Callback<List<NewTableCopy>>() {
       @Override
       public void onResponse(@NonNull Call<List<NewTableCopy>> call, @NonNull Response<List<NewTableCopy>> response) {
         List<NewTableCopy> newTableCopies = Objects.requireNonNull(response.body());
         if (!newTableCopies.isEmpty()) {
           callback.doSomething(newTableCopies.get(0));
+          newTableCall.cancel();
         } else {
           callback.doSomething(null);
+          newTableCall.cancel();
         }
       }
 
       @Override
       public void onFailure(@NonNull Call<List<NewTableCopy>> call, @NonNull Throwable throwable) {
         callback.doSomething(null);
+        newTableCall.cancel();
       }
     });
   }
@@ -123,7 +136,7 @@ public class OrderRegisterImpl implements OrderRegister {
   public void getOrders(User user, Table table, Callback<List<ProductOrder>> callback) {
     getOrderCopyList(user.id, orderCopyList -> {
       for (OrderCopy orderCopy : orderCopyList) {
-        if (table.id.equals(Integer.parseInt(orderCopy.tableID))) {
+        if (table.id.equals(orderCopy.tableID)) {
           getProductOrderCopyList(Integer.valueOf(orderCopy.id), productOrderCopyList -> {
             List<ProductOrder> productOrderList = new ArrayList<>();
             for (ProductOrderCopy productOrderCopy : productOrderCopyList)
@@ -145,37 +158,42 @@ public class OrderRegisterImpl implements OrderRegister {
     product.name = productOrderCopy.name;
     productOrder.product = product;
     productOrder.comment = productOrderCopy.comments;
+    productOrder.status = ProductOrderStatus.OLD;
     return productOrder;
   }
 
   private void getOrderCopyList(Integer userId, Callback<List<OrderCopy>> callback) {
     JsonService orderService = JsonServiceGenerator.createService(JsonService.class);
-    Call<List<OrderCopy>> ordersCall = orderService.getOrderCopyList("zakaz", userId);
+    Call<List<OrderCopy>> ordersCall = orderService.getOrderCopyList("zakaz", userId, Singleton.getInstance().counter++);
     ordersCall.enqueue(new retrofit2.Callback<List<OrderCopy>>() {
       @Override
       public void onResponse(@NonNull Call<List<OrderCopy>> call, @NonNull Response<List<OrderCopy>> response) {
         callback.doSomething(response.body());
+        ordersCall.cancel();
       }
 
       @Override
       public void onFailure(@NonNull Call<List<OrderCopy>> call, @NonNull Throwable t) {
         callback.doSomething(new ArrayList<>());
+        ordersCall.cancel();
       }
     });
   }
 
   private void getProductOrderCopyList(Integer zakazId, Callback<List<ProductOrderCopy>> callback) {
     JsonService productOrderService = JsonServiceGenerator.createService(JsonService.class);
-    Call<List<ProductOrderCopy>> productOrderCall = productOrderService.getProductOrderList("products", zakazId);
+    Call<List<ProductOrderCopy>> productOrderCall = productOrderService.getProductOrderList("products", zakazId, Singleton.getInstance().counter++);
     productOrderCall.enqueue(new retrofit2.Callback<List<ProductOrderCopy>>() {
       @Override
       public void onResponse(@NonNull Call<List<ProductOrderCopy>> call, @NonNull Response<List<ProductOrderCopy>> response) {
         callback.doSomething(response.body());
+        productOrderCall.cancel();
       }
 
       @Override
       public void onFailure(@NonNull Call<List<ProductOrderCopy>> call, @NonNull Throwable throwable) {
         callback.doSomething(new ArrayList<>());
+        productOrderCall.cancel();
       }
     });
   }

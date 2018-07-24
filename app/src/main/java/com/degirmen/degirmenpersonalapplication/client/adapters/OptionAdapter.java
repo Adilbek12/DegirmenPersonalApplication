@@ -14,6 +14,7 @@ import com.bigkoo.snappingstepper.SnappingStepper;
 import com.bigkoo.snappingstepper.listener.SnappingStepperValueChangeListener;
 import com.degirmen.degirmenpersonalapplication.R;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrder;
+import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrderStatus;
 import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 
 import java.util.List;
@@ -32,9 +33,37 @@ public class OptionAdapter extends ArrayAdapter<ProductOrder> {
   @NonNull
   @Override
   public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
-    if (convertView == null)
-      convertView = LayoutInflater.from(context).inflate(R.layout.item_option, parent, false);
+    ProductOrder productOrder = products.get(position);
 
+    if (productOrder.status == ProductOrderStatus.OLD) {
+      convertView = LayoutInflater.from(context).inflate(R.layout.item_option_not_editable, parent, false);
+      initOldProductOrderView(convertView, productOrder);
+    } else if (productOrder.status == ProductOrderStatus.NEW) {
+      convertView = LayoutInflater.from(context).inflate(R.layout.item_option, parent, false);
+      initNewProductOrderView(convertView, productOrder);
+    }
+
+    return convertView;
+  }
+
+  private void initOldProductOrderView(View convertView, ProductOrder productOrder) {
+    final TextView nameTextView = convertView.findViewById(R.id.tvName);
+    final TextView priceTextView = convertView.findViewById(R.id.tvPrice);
+    final TextView commentTextView = convertView.findViewById(R.id.tvComment);
+    final TextView count = convertView.findViewById(R.id.tvCount);
+
+    nameTextView.setText(productOrder.product.name);
+    priceTextView.setText(String.valueOf(productOrder.product.price));
+    if (productOrder.comment != null && !productOrder.comment.isEmpty()) {
+      commentTextView.setVisibility(View.VISIBLE);
+      commentTextView.setText(productOrder.comment);
+    } else {
+      commentTextView.setVisibility(View.GONE);
+    }
+    count.setText(String.valueOf(productOrder.count));
+  }
+
+  private void initNewProductOrderView(View convertView, ProductOrder productOrder) {
     final TextView nameTextView = convertView.findViewById(R.id.tvName);
     final TextView priceTextView = convertView.findViewById(R.id.tvPrice);
     final TextView commentTextView = convertView.findViewById(R.id.tvComment);
@@ -44,7 +73,6 @@ public class OptionAdapter extends ArrayAdapter<ProductOrder> {
     snappingStepper.setValue(1);
     commentTextView.setVisibility(View.GONE);
 
-    ProductOrder productOrder = products.get(position);
     nameTextView.setText(productOrder.product.name);
     priceTextView.setText(getPrice(productOrder.product.price));
 
@@ -65,7 +93,6 @@ public class OptionAdapter extends ArrayAdapter<ProductOrder> {
 
     snappingStepper.setOnValueChangeListener(snapperOnValueChangeListener(productOrder, button));
     button.setOnClickListener(onClickAddButton(snappingStepper, productOrder));
-    return convertView;
   }
 
   private String getPrice(Integer price) {
@@ -102,7 +129,7 @@ public class OptionAdapter extends ArrayAdapter<ProductOrder> {
         notifyDataSetChanged();
       } else if (button.getTag().equals("add")) {
         if (snappingStepper.getValue() > 0) {
-          ProductOrder toSingleton = new ProductOrder(productOrder.product, snappingStepper.getValue());
+          ProductOrder toSingleton = new ProductOrder(productOrder.product, snappingStepper.getValue(), ProductOrderStatus.NEW);
           toRemoveButton(button);
           Singleton.getInstance().addProduct(toSingleton);
           Toast.makeText(context, "Вы добавили " + productOrder.product.name, Toast.LENGTH_SHORT).show();

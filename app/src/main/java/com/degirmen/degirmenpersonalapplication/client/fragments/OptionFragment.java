@@ -19,6 +19,7 @@ import com.degirmen.degirmenpersonalapplication.client.adapters.OptionAdapter;
 import com.degirmen.degirmenpersonalapplication.controller.controller.RegisterController;
 import com.degirmen.degirmenpersonalapplication.controller.model.Product;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrder;
+import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrderStatus;
 import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
 
@@ -94,7 +95,8 @@ public class OptionFragment extends Fragment {
     if (getActivity() != null)
       getActivity().runOnUiThread(() -> {
         loading(false);
-        for (Product product : products) productOrders.add(new ProductOrder(product, 1));
+        for (Product product : products)
+          productOrders.add(new ProductOrder(product, 1, ProductOrderStatus.NEW));
         adapter.notifyDataSetChanged();
       });
     else

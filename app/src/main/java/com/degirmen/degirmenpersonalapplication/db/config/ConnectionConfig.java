@@ -10,5 +10,5 @@ public interface ConnectionConfig {
 
   String password();
 
-  void setConfig(String host, String port, String user, String password);
+  void setConfig(String host);
 }

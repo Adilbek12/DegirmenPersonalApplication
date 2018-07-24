@@ -14,6 +14,7 @@ import com.degirmen.degirmenpersonalapplication.client.adapters.OptionAdapter;
 import com.degirmen.degirmenpersonalapplication.controller.controller.RegisterController;
 import com.degirmen.degirmenpersonalapplication.controller.model.Product;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrder;
+import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrderStatus;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
 
 import java.util.ArrayList;
@@ -66,7 +67,8 @@ public class SearchActivity extends AppCompatActivity {
   private void setResult(List<Product> list) {
     runOnUiThread(() -> {
       products.clear();
-      for (Product product : list) this.products.add(new ProductOrder(product, 1));
+      for (Product product : list)
+        this.products.add(new ProductOrder(product, 1, ProductOrderStatus.NEW));
       this.adapter.notifyDataSetChanged();
     });
   }

@@ -28,20 +28,17 @@ public class ConnectionConfigFromSp implements ConnectionConfig {
   }
 
   @Override
-  public void setConfig(String host, String port, String user, String password) {
+  public void setConfig(String host) {
     SharedPreferences.Editor editor = getSharedPreferences().edit();
     editor.putString("HOST", host);
-    editor.putString("PORT", port);
-    editor.putString("USER", user);
-    editor.putString("PASSWORD", password);
     editor.apply();
   }
 
-  private String getString(String key, String def) {
+  public static String getString(String key, String def) {
     return getSharedPreferences().getString(key, def);
   }
 
-  private SharedPreferences getSharedPreferences() {
+  private static SharedPreferences getSharedPreferences() {
     return Singleton.getInstance().getContext().getSharedPreferences("CONNECTION_CONFIG", Context.MODE_PRIVATE);
   }
 }

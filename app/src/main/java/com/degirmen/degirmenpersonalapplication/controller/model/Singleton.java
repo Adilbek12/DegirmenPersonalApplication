@@ -14,6 +14,8 @@ public class Singleton {
   private Context context;
   private Table table;
 
+  public Integer counter = 0;
+
   private Singleton() {
     this.notes = new ArrayList<>();
   }
@@ -38,8 +40,19 @@ public class Singleton {
     Singleton.getInstance().notes.add(product);
   }
 
+  public void addAllProduct(List<ProductOrder> productOrders) {
+    notes.addAll(productOrders);
+  }
+
   public List<ProductOrder> getAll() {
     return Singleton.getInstance().notes;
+  }
+
+  public List<ProductOrder> getAllNew() {
+    List<ProductOrder> productCopyList = new ArrayList<>();
+    for (ProductOrder productOrder : notes)
+      if (productOrder.status == ProductOrderStatus.NEW) productCopyList.add(productOrder);
+    return productCopyList;
   }
 
   public int contains(ProductOrder product) {

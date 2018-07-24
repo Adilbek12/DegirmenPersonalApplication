@@ -7,6 +7,7 @@ import com.degirmen.degirmenpersonalapplication.controller.model.ProductCategory
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductCategoryCopy;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductCopy;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductType;
+import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
 import com.degirmen.degirmenpersonalapplication.controller.register.Register;
 import com.degirmen.degirmenpersonalapplication.controller.service.JsonService;
@@ -54,16 +55,18 @@ public class ProductRegisterImpl extends Register implements ProductRegister {
 
   private void getCategoryCopyList(Integer root, Callback<List<ProductCategoryCopy>> callback) {
     JsonService categoryService = JsonServiceGenerator.createService(JsonService.class);
-    Call<List<ProductCategoryCopy>> categoryCall = categoryService.getCategory("category", root);
+    Call<List<ProductCategoryCopy>> categoryCall = categoryService.getCategory("category", root, Singleton.getInstance().counter++);
     categoryCall.enqueue(new retrofit2.Callback<List<ProductCategoryCopy>>() {
       @Override
       public void onResponse(@NonNull Call<List<ProductCategoryCopy>> call, @NonNull Response<List<ProductCategoryCopy>> response) {
         callback.doSomething(response.body());
+        categoryCall.cancel();
       }
 
       @Override
       public void onFailure(@NonNull Call<List<ProductCategoryCopy>> call, @NonNull Throwable t) {
         callback.doSomething(new ArrayList<>());
+        categoryCall.cancel();
       }
     });
   }
@@ -89,16 +92,18 @@ public class ProductRegisterImpl extends Register implements ProductRegister {
 
   private void getProductsCopy(Integer categoryId, Callback<List<ProductCopy>> callback) {
     JsonService productService = JsonServiceGenerator.createService(JsonService.class);
-    Call<List<ProductCopy>> productCall = productService.getProducts("getproducts", categoryId);
+    Call<List<ProductCopy>> productCall = productService.getProducts("getproducts", categoryId, Singleton.getInstance().counter++);
     productCall.enqueue(new retrofit2.Callback<List<ProductCopy>>() {
       @Override
       public void onResponse(@NonNull Call<List<ProductCopy>> call, @NonNull Response<List<ProductCopy>> response) {
         callback.doSomething(response.body());
+        productCall.cancel();
       }
 
       @Override
       public void onFailure(@NonNull Call<List<ProductCopy>> call, @NonNull Throwable t) {
         callback.doSomething(new ArrayList<>());
+        productCall.cancel();
       }
     });
   }

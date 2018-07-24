@@ -2,6 +2,7 @@ package com.degirmen.degirmenpersonalapplication.db.register_impl;
 
 import android.support.annotation.NonNull;
 
+import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 import com.degirmen.degirmenpersonalapplication.controller.model.User;
 import com.degirmen.degirmenpersonalapplication.controller.model.UserCopy;
 import com.degirmen.degirmenpersonalapplication.controller.register.AuthRegister;
@@ -30,26 +31,30 @@ public class AuthRegisterImpl implements AuthRegister {
   @Override
   public void auth(String userName, String password, Callback<User> callback) {
     getUserCopyList(usersCopy -> {
-      for (UserCopy userCopy : usersCopy)
+      for (UserCopy userCopy : usersCopy) {
         if (userCopy.name.equals(userName) && userCopy.password.equals(password)) {
           callback.doSomething(new User(Integer.parseInt(userCopy.id), userCopy.name));
-          break;
+          return;
         }
+      }
+      callback.doSomething(null);
     });
   }
 
   private void getUserCopyList(Callback<List<UserCopy>> callback) {
     JsonService userService = JsonServiceGenerator.createService(JsonService.class);
-    Call<List<UserCopy>> usersCall = userService.getUserList();
+    Call<List<UserCopy>> usersCall = userService.getUserList("users", Singleton.getInstance().counter++);
     usersCall.enqueue(new retrofit2.Callback<List<UserCopy>>() {
       @Override
       public void onResponse(@NonNull Call<List<UserCopy>> call, @NonNull Response<List<UserCopy>> response) {
         callback.doSomething(response.body());
+        usersCall.cancel();
       }
 
       @Override
       public void onFailure(@NonNull Call<List<UserCopy>> call, @NonNull Throwable throwable) {
         callback.doSomething(new ArrayList<>());
+        usersCall.cancel();
       }
     });
   }

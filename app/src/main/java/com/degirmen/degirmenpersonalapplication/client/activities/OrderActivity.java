@@ -58,8 +58,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAdapter.OnR
 
   private void alertOnClickPositiveButton(DialogInterface dialog) {
     String table = Singleton.getInstance().getTable().title;
-
-    Order order = new Order(Singleton.getInstance().getAll(), Singleton.getInstance().getTable().title);
+    Order order = new Order(Singleton.getInstance().getAllNew(), Singleton.getInstance().getTable().title);
     RegisterController.getInstance().getOrderRegister().toOrder(order, Singleton.getInstance().getUser(), table, success -> {
       finish();
       Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
@@ -72,7 +71,6 @@ public class OrderActivity extends AppCompatActivity implements OrderAdapter.OnR
 
   private void initListView() {
     ListView listView = findViewById(R.id.orderListView);
-
     adapter = new OrderAdapter(this, Singleton.getInstance().getAll());
     adapter.onRemoveListener = this;
     listView.setAdapter(adapter);

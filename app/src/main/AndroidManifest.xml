@@ -1,41 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.degirmen.degirmenpersonalapplication">
+  package="com.degirmen.degirmenpersonalapplication">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.INTERNET" />
 
-    <application
-        android:usesCleartextTraffic="true"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity
-            android:name=".client.activities.LoginActivity"
-            android:label="@string/app_name"
-            android:windowSoftInputMode="stateVisible|adjustResize">
+  <application
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme"
+    android:usesCleartextTraffic="true">
+    <activity
+      android:name=".client.activities.LoginActivity"
+      android:label="@string/app_name"
+      android:screenOrientation="portrait"
+      android:windowSoftInputMode="stateVisible|adjustResize">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
 
-        </activity>
-        <activity android:name=".client.activities.OptionActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".client.activities.MenuActivity" />
-        </activity>
-        <activity android:name=".client.activities.SearchActivity" />
-        <activity android:name=".client.activities.OrderActivity" />
-        <activity android:name=".client.activities.MenuActivity" />
-        <activity android:name=".client.activities.SettingActivity" />
-        <activity android:name=".client.activities.MainMenuActivity">
+    </activity>
+    <activity android:name=".client.activities.OptionActivity">
+      <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value=".client.activities.MenuActivity" />
+    </activity>
+    <activity android:name=".client.activities.SearchActivity" />
+    <activity android:name=".client.activities.OrderActivity" />
+    <activity android:name=".client.activities.MenuActivity" />
+    <activity
+      android:name=".client.activities.SettingActivity"
+      android:screenOrientation="portrait" />
+    <activity
+      android:name=".client.activities.MainMenuActivity"
+      android:screenOrientation="portrait">
 
-        </activity>
-    </application>
+    </activity>
+  </application>
 
 </manifest>

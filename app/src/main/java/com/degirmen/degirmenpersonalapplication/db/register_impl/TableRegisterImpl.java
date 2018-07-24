@@ -1,7 +1,6 @@
 package com.degirmen.degirmenpersonalapplication.db.register_impl;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 import com.degirmen.degirmenpersonalapplication.controller.model.Table;
@@ -21,8 +20,6 @@ import retrofit2.Response;
 
 public class TableRegisterImpl implements TableRegister {
 
-  private static final String TAG = TableRegisterImpl.class.getName();
-
   @Override
   public void getTableList(Callback<List<Table>> callback) {
     getTableCopyList(tablesCopy -> {
@@ -34,27 +31,28 @@ public class TableRegisterImpl implements TableRegister {
 
   private void getTableCopyList(Callback<List<TableCopy>> callback) {
     JsonService tableService = JsonServiceGenerator.createService(JsonService.class);
-    Call<List<TableCopy>> tableCall = tableService.getTableCopyListCall();
+    Call<List<TableCopy>> tableCall = tableService.getTableCopyListCall("tables", Singleton.getInstance().counter++);
     tableCall.enqueue(new retrofit2.Callback<List<TableCopy>>() {
       @Override
       public void onResponse(@NonNull Call<List<TableCopy>> call, @NonNull Response<List<TableCopy>> response) {
         callback.doSomething(response.body());
+        tableCall.cancel();
       }
 
       @Override
       public void onFailure(@NonNull Call<List<TableCopy>> call, @NonNull Throwable throwable) {
         callback.doSomething(new ArrayList<>());
-        Log.w(TAG, "onFailure getTableCopyList() !");
+        tableCall.cancel();
       }
     });
   }
 
   private Table fromCopy(TableCopy tableCopy) {
     Table table = new Table();
-    String tableID = tableCopy.tableID;
+    String tableID = tableCopy.tableID == null ? "" : tableCopy.tableID;
     table.status = TableStatus.FREE;
     if (!tableID.isEmpty()) {
-      table.id = Integer.valueOf(tableCopy.tableID);
+      table.id = tableCopy.tableID;
       if (Objects.equals(Singleton.getInstance().getUser().id, Integer.parseInt(tableCopy.userID)))
         table.status = TableStatus.MY;
       else table.status = TableStatus.FOREIGN;

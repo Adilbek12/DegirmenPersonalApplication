@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bigkoo.snappingstepper.SnappingStepper;
 import com.degirmen.degirmenpersonalapplication.R;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrder;
+import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrderStatus;
 import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 
 import java.util.List;
@@ -38,9 +39,35 @@ public class OrderAdapter extends ArrayAdapter<ProductOrder> {
   @NonNull
   @Override
   public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
-    if (convertView == null)
+    ProductOrder productOrder = products.get(position);
+    if (productOrder.status == ProductOrderStatus.NEW) {
       convertView = LayoutInflater.from(context).inflate(R.layout.item_option, parent, false);
+      initNewProductOrderView(convertView, productOrder, position);
+    } else {
+      convertView = LayoutInflater.from(context).inflate(R.layout.item_option_not_editable, parent, false);
+      initOldProductOrderView(convertView, productOrder);
+    }
+    return convertView;
+  }
 
+  private void initOldProductOrderView(View convertView, ProductOrder productOrder) {
+    final TextView nameTextView = convertView.findViewById(R.id.tvName);
+    final TextView priceTextView = convertView.findViewById(R.id.tvPrice);
+    final TextView commentTextView = convertView.findViewById(R.id.tvComment);
+    final TextView count = convertView.findViewById(R.id.tvCount);
+
+    nameTextView.setText(productOrder.product.name);
+    priceTextView.setText(String.valueOf(productOrder.product.price));
+    if (productOrder.comment != null && !productOrder.comment.isEmpty()) {
+      commentTextView.setVisibility(View.VISIBLE);
+      commentTextView.setText(productOrder.comment);
+    } else {
+      commentTextView.setVisibility(View.GONE);
+    }
+    count.setText(String.valueOf(productOrder.count));
+  }
+
+  private void initNewProductOrderView(View convertView, ProductOrder productOrder, Integer position) {
     final TextView nameTextView = convertView.findViewById(R.id.tvName);
     final TextView priceTextView = convertView.findViewById(R.id.tvPrice);
     final TextView commentTextView = convertView.findViewById(R.id.tvComment);
@@ -52,7 +79,6 @@ public class OrderAdapter extends ArrayAdapter<ProductOrder> {
       if (value <= 0) onRemoveListener.removeAt(position);
     });
 
-    ProductOrder productOrder = products.get(position);
 
     if (productOrder.comment != null && !productOrder.comment.isEmpty()) {
       commentTextView.setVisibility(View.VISIBLE);
@@ -67,7 +93,6 @@ public class OrderAdapter extends ArrayAdapter<ProductOrder> {
     addButton.setImageResource(R.drawable.ic_remove);
     addButton.setOnClickListener(view -> onRemoveListener.removeAt(position));
 
-    return convertView;
   }
 
   private String getPrice(Integer price) {

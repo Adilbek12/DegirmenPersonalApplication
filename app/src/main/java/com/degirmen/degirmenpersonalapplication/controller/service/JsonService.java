@@ -17,34 +17,44 @@ import retrofit2.http.Query;
 
 public interface JsonService {
 
-  @GET("/json/?obj=users")
-  Call<List<UserCopy>> getUserList();
+  @GET("/json/")
+  Call<List<UserCopy>> getUserList(
+    @Query("obj") String users,
+    @Query("counter") Integer counter
+  );
 
-  @GET("/json/?obj=tables")
-  Call<List<TableCopy>> getTableCopyListCall();
+  @GET("/json/")
+  Call<List<TableCopy>> getTableCopyListCall(
+    @Query("obj") String tables,
+    @Query("counter") Integer counter
+  );
 
   @GET("/json/")
   Call<List<OrderCopy>> getOrderCopyList(
     @Query("obj") String zakaz,
-    @Query("userid") Integer userId
+    @Query("userid") Integer userId,
+    @Query("counter") Integer counter
   );
 
   @GET("/json/")
   Call<List<ProductCopy>> getProducts(
     @Query("obj") String getProducts,
-    @Query("categoryid") Integer categoryId
+    @Query("categoryid") Integer categoryId,
+    @Query("counter") Integer counter
   );
 
   @GET("/json/")
   Call<List<ProductCategoryCopy>> getCategory(
     @Query("obj") String category,
-    @Query("parent") Integer parent
+    @Query("parent") Integer parent,
+    @Query("counter") Integer counter
   );
 
   @GET("/json/")
   Call<List<ProductOrderCopy>> getProductOrderList(
     @Query("obj") String products,
-    @Query("zakazid") Integer zakazId
+    @Query("zakazid") Integer zakazId,
+    @Query("counter") Integer counter
   );
 
   @POST("/json/")
@@ -53,13 +63,15 @@ public interface JsonService {
     @Query("userid") Integer userId,
     @Query("clientcount") Integer clientCount,
     @Query("tarif") Integer tarif,
-    @Query("tableid") String table
+    @Query("tableid") String table,
+    @Query("counter") Integer counter
   );
 
   @POST("/json/")
   Call<List<NewTableCopy>> printCehck(
     @Query("command") String print_check,
-    @Query("zakazid") Integer zakazId
+    @Query("zakazid") Integer zakazId,
+    @Query("counter") Integer counter
   );
 
 }

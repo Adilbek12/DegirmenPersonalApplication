@@ -15,16 +15,16 @@ import com.degirmen.degirmenpersonalapplication.db.config.ConnectionConfigFromSp
 public class SettingActivity extends AppCompatActivity {
 
   private EditText hostEditText;
-  private EditText portEditText;
-  private EditText userEditText;
-  private EditText passwordEditText;
 
   private ConnectionConfig connectionConfig;
+
+  public SettingActivity() {}
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_setting);
+
 
     connectionConfig = new ConnectionConfigFromSp();
 
@@ -55,36 +55,25 @@ public class SettingActivity extends AppCompatActivity {
 
   private void initEditText() {
     hostEditText = findViewById(R.id.host_edit_text);
-    portEditText = findViewById(R.id.port_edit_text);
-    userEditText = findViewById(R.id.user_edit_text);
-    passwordEditText = findViewById(R.id.password_edit_text);
     setTextFromConfigFile();
   }
 
   private void setTextFromConfigFile() {
     hostEditText.setText(connectionConfig.host());
-    portEditText.setText(connectionConfig.port());
-    userEditText.setText(connectionConfig.user());
-    passwordEditText.setText(connectionConfig.password());
   }
 
   private boolean validNewConfig() {
-    return validEditText(hostEditText) && validEditText(portEditText)
-      && validEditText(userEditText) && validEditText(passwordEditText);
+    return validEditText(hostEditText) && hostEditText.getText().toString().matches("^\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b$");
   }
 
   private boolean validEditText(EditText editText) {
     return editText.getText() != null && editText.getText().length() != 0;
   }
 
-
   private void saveConfigs() {
     if (validNewConfig()) {
       String host = hostEditText.getText().toString();
-      String port = portEditText.getText().toString();
-      String user = userEditText.getText().toString();
-      String password = passwordEditText.getText().toString();
-      connectionConfig.setConfig(host, port, user, password);
+      connectionConfig.setConfig(host);
       alert("Сохранено.");
       finish();
     } else {
