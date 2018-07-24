@@ -18,60 +18,53 @@ import retrofit2.http.Query;
 public interface JsonService {
 
   @GET("/json/")
-  Call<List<UserCopy>> getUserList(
+  Call<String> getUserList(
     @Query("obj") String users,
     @Query("counter") Integer counter
   );
 
   @GET("/json/")
-  Call<List<TableCopy>> getTableCopyListCall(
-    @Query("obj") String tables,
-    @Query("counter") Integer counter
+  Call<String> getTableCopyListCall(
+    @Query("obj") String tables
   );
 
   @GET("/json/")
-  Call<List<OrderCopy>> getOrderCopyList(
+  Call<String> getOrderCopyList(
     @Query("obj") String zakaz,
-    @Query("userid") Integer userId,
-    @Query("counter") Integer counter
+    @Query("userid") Integer userId
   );
 
   @GET("/json/")
-  Call<List<ProductCopy>> getProducts(
+  Call<String> getProducts(
     @Query("obj") String getProducts,
-    @Query("categoryid") Integer categoryId,
-    @Query("counter") Integer counter
+    @Query("categoryid") Integer categoryId
   );
 
   @GET("/json/")
-  Call<List<ProductCategoryCopy>> getCategory(
+  Call<String> getCategory(
     @Query("obj") String category,
-    @Query("parent") Integer parent,
-    @Query("counter") Integer counter
+    @Query("parent") Integer parent
   );
 
   @GET("/json/")
-  Call<List<ProductOrderCopy>> getProductOrderList(
+  Call<String> getProductOrderList(
     @Query("obj") String products,
-    @Query("zakazid") Integer zakazId,
-    @Query("counter") Integer counter
+    @Query("zakazid") Integer zakazId
   );
 
   @POST("/json/")
-  Call<List<NewTableCopy>> newTable(
+  Call<String> newTable(
     @Query("command") String newZakaz,
     @Query("userid") Integer userId,
     @Query("clientcount") Integer clientCount,
     @Query("tarif") Integer tarif,
-    @Query("tableid") String table,
-    @Query("counter") Integer counter
+    @Query("tableid") String table
   );
 
   @POST("/json/")
-  Call<List<NewTableCopy>> printCehck(
+  Call<String> printCehck(
     @Query("command") String print_check,
-    @Query("zakazid") Integer zakazId,
-    @Query("counter") Integer counter
+    @Query("zakazid") Integer zakazId
   );
 
 }

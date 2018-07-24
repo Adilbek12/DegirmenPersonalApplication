@@ -1,7 +1,9 @@
 package com.degirmen.degirmenpersonalapplication.db.register_impl;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.degirmen.degirmenpersonalapplication.controller.model.ProductCategoryCopy;
 import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 import com.degirmen.degirmenpersonalapplication.controller.model.Table;
 import com.degirmen.degirmenpersonalapplication.controller.model.TableCopy;
@@ -10,7 +12,10 @@ import com.degirmen.degirmenpersonalapplication.controller.register.TableRegiste
 import com.degirmen.degirmenpersonalapplication.controller.service.JsonService;
 import com.degirmen.degirmenpersonalapplication.controller.service.JsonServiceGenerator;
 import com.degirmen.degirmenpersonalapplication.controller.util.Callback;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +24,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class TableRegisterImpl implements TableRegister {
+  private static final String TAG = "TableRegisterImpl";
 
   @Override
   public void getTableList(Callback<List<Table>> callback) {
@@ -31,18 +37,28 @@ public class TableRegisterImpl implements TableRegister {
 
   private void getTableCopyList(Callback<List<TableCopy>> callback) {
     JsonService tableService = JsonServiceGenerator.createService(JsonService.class);
-    Call<List<TableCopy>> tableCall = tableService.getTableCopyListCall("tables", Singleton.getInstance().counter++);
-    tableCall.enqueue(new retrofit2.Callback<List<TableCopy>>() {
+    Call<String> tableCall = tableService.getTableCopyListCall("tables");
+    tableCall.enqueue(new retrofit2.Callback<String>() {
       @Override
-      public void onResponse(@NonNull Call<List<TableCopy>> call, @NonNull Response<List<TableCopy>> response) {
-        callback.doSomething(response.body());
-        tableCall.cancel();
+      public void onResponse(Call<String> call, Response<String> response) {
+        String responseString = response.body();
+        String[] arrayString = responseString.split("/>");
+        if (arrayString.length > 1){
+          String jsonString = arrayString[1];
+          Type listType = new TypeToken<ArrayList<TableCopy>>(){}.getType();
+          List<TableCopy> categories =
+            new GsonBuilder().create().fromJson(jsonString, listType);
+
+          for(TableCopy user: categories){
+            Log.d(TAG, "onResponse: " + user.toString());
+          }
+          callback.doSomething(categories);
+        }
       }
 
       @Override
-      public void onFailure(@NonNull Call<List<TableCopy>> call, @NonNull Throwable throwable) {
-        callback.doSomething(new ArrayList<>());
-        tableCall.cancel();
+      public void onFailure(Call<String> call, Throwable t) {
+
       }
     });
   }

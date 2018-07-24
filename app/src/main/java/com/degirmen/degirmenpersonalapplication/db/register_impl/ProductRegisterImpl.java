@@ -1,11 +1,13 @@
 package com.degirmen.degirmenpersonalapplication.db.register_impl;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.degirmen.degirmenpersonalapplication.controller.model.Product;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductCategory;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductCategoryCopy;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductCopy;
+import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrderCopy;
 import com.degirmen.degirmenpersonalapplication.controller.model.ProductType;
 import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 import com.degirmen.degirmenpersonalapplication.controller.register.ProductRegister;
@@ -14,7 +16,10 @@ import com.degirmen.degirmenpersonalapplication.controller.service.JsonService;
 import com.degirmen.degirmenpersonalapplication.controller.service.JsonServiceGenerator;
 import com.degirmen.degirmenpersonalapplication.controller.util.Callback;
 import com.degirmen.degirmenpersonalapplication.db.dao.ProductDao;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +29,7 @@ import retrofit2.Response;
 
 public class ProductRegisterImpl extends Register implements ProductRegister {
 
+  private static final String TAG = "ProductRegisterImpl";
   private ProductDao productDao;
 
   public ProductRegisterImpl() {
@@ -55,18 +61,28 @@ public class ProductRegisterImpl extends Register implements ProductRegister {
 
   private void getCategoryCopyList(Integer root, Callback<List<ProductCategoryCopy>> callback) {
     JsonService categoryService = JsonServiceGenerator.createService(JsonService.class);
-    Call<List<ProductCategoryCopy>> categoryCall = categoryService.getCategory("category", root, Singleton.getInstance().counter++);
-    categoryCall.enqueue(new retrofit2.Callback<List<ProductCategoryCopy>>() {
+    Call<String> categoryCall = categoryService.getCategory("category", root);
+    categoryCall.enqueue(new retrofit2.Callback<String>() {
       @Override
-      public void onResponse(@NonNull Call<List<ProductCategoryCopy>> call, @NonNull Response<List<ProductCategoryCopy>> response) {
-        callback.doSomething(response.body());
-        categoryCall.cancel();
+      public void onResponse(Call<String> call, Response<String> response) {
+        String responseString = response.body();
+        String[] arrayString = responseString.split("/>");
+        if (arrayString.length > 1){
+          String jsonString = arrayString[1];
+          Type listType = new TypeToken<ArrayList<ProductCategoryCopy>>(){}.getType();
+          List<ProductCategoryCopy> categories =
+            new GsonBuilder().create().fromJson(jsonString, listType);
+
+          for(ProductCategoryCopy user: categories){
+            Log.d(TAG, "onResponse: " + user.toString());
+          }
+          callback.doSomething(categories);
+        }
       }
 
       @Override
-      public void onFailure(@NonNull Call<List<ProductCategoryCopy>> call, @NonNull Throwable t) {
-        callback.doSomething(new ArrayList<>());
-        categoryCall.cancel();
+      public void onFailure(Call<String> call, Throwable t) {
+
       }
     });
   }
@@ -92,18 +108,28 @@ public class ProductRegisterImpl extends Register implements ProductRegister {
 
   private void getProductsCopy(Integer categoryId, Callback<List<ProductCopy>> callback) {
     JsonService productService = JsonServiceGenerator.createService(JsonService.class);
-    Call<List<ProductCopy>> productCall = productService.getProducts("getproducts", categoryId, Singleton.getInstance().counter++);
-    productCall.enqueue(new retrofit2.Callback<List<ProductCopy>>() {
+    Call<String> productCall = productService.getProducts("getProducts", categoryId);
+    productCall.enqueue(new retrofit2.Callback<String>() {
       @Override
-      public void onResponse(@NonNull Call<List<ProductCopy>> call, @NonNull Response<List<ProductCopy>> response) {
-        callback.doSomething(response.body());
-        productCall.cancel();
+      public void onResponse(Call<String> call, Response<String> response) {
+        String responseString = response.body();
+        String[] arrayString = responseString.split("/>");
+        if (arrayString.length > 1){
+          String jsonString = arrayString[1];
+          Type listType = new TypeToken<ArrayList<ProductCopy>>(){}.getType();
+          List<ProductCopy> products =
+            new GsonBuilder().create().fromJson(jsonString, listType);
+
+          for(ProductCopy product: products){
+            Log.d(TAG, "onResponse: " + product.toString());
+          }
+          callback.doSomething(products);
+        }
       }
 
       @Override
-      public void onFailure(@NonNull Call<List<ProductCopy>> call, @NonNull Throwable t) {
-        callback.doSomething(new ArrayList<>());
-        productCall.cancel();
+      public void onFailure(Call<String> call, Throwable t) {
+
       }
     });
   }
