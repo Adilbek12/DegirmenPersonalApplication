@@ -10,13 +10,17 @@ import android.widget.Toast;
 
 import com.degirmen.degirmenpersonalapplication.R;
 import com.degirmen.degirmenpersonalapplication.db.config.ConnectionConfig;
+import com.degirmen.degirmenpersonalapplication.db.config.ConnectionConfigFactory;
 import com.degirmen.degirmenpersonalapplication.db.config.ConnectionConfigFromSp;
 
 public class SettingActivity extends AppCompatActivity {
 
   private EditText hostEditText;
+  private EditText portEditText;
+  private EditText userEditText;
+  private EditText passwordEditText;
 
-  private ConnectionConfig connectionConfig;
+  private ConnectionConfigFactory connectionConfig;
 
   public SettingActivity() {}
 
@@ -24,7 +28,6 @@ public class SettingActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_setting);
-
 
     connectionConfig = new ConnectionConfigFromSp();
 
@@ -55,11 +58,17 @@ public class SettingActivity extends AppCompatActivity {
 
   private void initEditText() {
     hostEditText = findViewById(R.id.host_edit_text);
+    portEditText = findViewById(R.id.port_edit_text);
+    userEditText = findViewById(R.id.user_edit_text);
+    passwordEditText = findViewById(R.id.password_edit_text);
     setTextFromConfigFile();
   }
 
   private void setTextFromConfigFile() {
     hostEditText.setText(connectionConfig.host());
+    portEditText.setText(connectionConfig.port());
+    userEditText.setText(connectionConfig.user());
+    passwordEditText.setText(connectionConfig.password());
   }
 
   private boolean validNewConfig() {
@@ -73,7 +82,23 @@ public class SettingActivity extends AppCompatActivity {
   private void saveConfigs() {
     if (validNewConfig()) {
       String host = hostEditText.getText().toString();
-      connectionConfig.setConfig(host);
+      String port = portEditText.getText().toString();
+      String user = userEditText.getText().toString();
+      String password = passwordEditText.getText().toString();
+
+      connectionConfig.setConfig(new ConnectionConfig() {
+        @Override
+        public String host() {return host;}
+
+        @Override
+        public String port() {return port;}
+
+        @Override
+        public String user() {return user;}
+
+        @Override
+        public String password() {return password;}
+      });
       alert("Сохранено.");
       finish();
     } else {

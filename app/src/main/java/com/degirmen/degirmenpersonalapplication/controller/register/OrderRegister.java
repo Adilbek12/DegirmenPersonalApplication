@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface OrderRegister {
 
-  void toOrder(Order order, User forUser, String table, Callback<Boolean> callback);
+  void toOrder(Order order, User forUser, String table, Integer zakazId, Callback<Boolean> callback);
 
   void getOrders(User user, Table table, Callback<List<ProductOrder>> cal);
 }

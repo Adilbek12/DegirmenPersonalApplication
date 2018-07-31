@@ -9,6 +9,4 @@ public interface ConnectionConfig {
   String user();
 
   String password();
-
-  void setConfig(String host);
 }

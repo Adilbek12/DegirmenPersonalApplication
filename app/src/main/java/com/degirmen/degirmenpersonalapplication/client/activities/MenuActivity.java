@@ -27,7 +27,6 @@ public class MenuActivity extends AppCompatActivity {
     initTitle();
     initTabLayout();
     initImageView();
-    initViewPager();
   }
 
   private void initTitle() {
@@ -63,10 +62,11 @@ public class MenuActivity extends AppCompatActivity {
 
   private void addTabs() {
     ProductRegister register = RegisterController.getInstance().getProductRegister();
-    register.getProductTypeList(productTypes -> {
+    register.getProductTypeList(productTypes -> runOnUiThread(() -> {
       for (ProductType type : productTypes)
         tabLayout.addTab(tabLayout.newTab().setText(String.valueOf(type.root)));
-    });
+      initViewPager();
+    }));
   }
 
   private TabLayout.BaseOnTabSelectedListener getOnSelectedListener() {

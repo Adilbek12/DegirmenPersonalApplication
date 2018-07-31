@@ -1,7 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:background="@color/backgroundColor">
 
   <com.degirmen.degirmenpersonalapplication.client.utils.KeyboardAwareScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,7 +16,6 @@
       xmlns:tools="http://schemas.android.com/tools"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@android:color/white"
       android:gravity="center_horizontal"
       android:orientation="vertical"
       tools:context="com.degirmen.degirmenpersonalapplication.client.activities.LoginActivity">
@@ -23,18 +24,35 @@
       <ImageView
         android:id="@+id/logo_image_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="170dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="0dp"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
-        android:padding="20dp"
+        android:paddingTop="20dp"
         android:src="@drawable/ic_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="VectorDrawableCompat" />
+
+      <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="DEGIRMEN"
+        android:textColor="@color/colorPrimary"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo_image_view" />
 
       <AutoCompleteTextView
         android:id="@+id/name_auth_complete_text_view"
@@ -44,18 +62,19 @@
         android:layout_below="@+id/logo_image_view"
         android:layout_marginEnd="60dp"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="40dp"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_edit_text"
+        android:drawablePadding="2dp"
+        android:drawableRight="@drawable/ic_person"
         android:ems="10"
         android:hint="@string/name_hint"
         android:inputType="textPersonName"
         android:padding="10dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textColorHint="@color/colorPrimaryDark"
-        android:textSize="20dp"
+        android:textColor="@color/textColor"
+        android:textColorHint="@color/hintColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo_image_view" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
       <EditText
         android:id="@+id/password_edit_text"
@@ -64,14 +83,15 @@
         android:layout_alignTop="@+id/name_auth_complete_text_view"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:background="@drawable/rounded_edit_text"
+        android:drawablePadding="2dp"
+        android:drawableRight="@drawable/ic_lock"
         android:ems="10"
         android:hint="@string/password_hint"
         android:inputType="textPassword"
         android:padding="10dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textColorHint="@color/colorPrimaryDark"
-        android:textSize="20dp"
+        android:textColor="@color/textColor"
+        android:textColorHint="@color/hintColor"
         app:layout_constraintEnd_toEndOf="@+id/name_auth_complete_text_view"
         app:layout_constraintStart_toStartOf="@+id/name_auth_complete_text_view"
         app:layout_constraintTop_toBottomOf="@+id/name_auth_complete_text_view" />
@@ -82,7 +102,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@color/colorPrimary"
         android:onClick="buttonClicked"
         android:src="@drawable/ic_settings"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,9 +111,9 @@
       <Button
         android:id="@+id/sign_in_button"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="8dp"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@color/colorPrimary"
         android:onClick="buttonClicked"
         android:text="Войти"
         android:textColor="@android:color/white"
@@ -107,12 +127,6 @@
 
   </com.degirmen.degirmenpersonalapplication.client.utils.KeyboardAwareScrollView>
 
-  <include layout="@layout/snippet_progress_bar"/>
+  <include layout="@layout/snippet_progress_bar" />
 
 </RelativeLayout>
-
-
-
-
-
-

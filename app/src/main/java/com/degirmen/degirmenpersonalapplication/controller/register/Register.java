@@ -6,10 +6,10 @@ public abstract class Register {
   }
 
   protected void sleep() {
-    try {
-      Thread.sleep(1000L);
-    } catch (InterruptedException e) {
-      throw new RuntimeException();
-    }
+//    try {
+//      Thread.sleep(1000L);
+//    } catch (InterruptedException e) {
+//      throw new RuntimeException();
+//    }
   }
 }

@@ -33,7 +33,6 @@ public class MainMenuActivity extends AppCompatActivity implements TableAdapter.
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_menu);
 
-
     darkView = findViewById(R.id.darkView);
     progressBar = findViewById(R.id.progressBar);
 
@@ -49,28 +48,31 @@ public class MainMenuActivity extends AppCompatActivity implements TableAdapter.
   }
 
   private void reloadAdapter() {
-    RegisterController.getInstance().getTableRegister().getTableList(tableList -> {
+    RegisterController.getInstance().getTableRegister().getTableList(tableList ->
       runOnUiThread(() -> {
         this.tableList = tableList;
         adapter.notifyDataSetChanged();
-      });
-    });
+      })
+    );
   }
 
   @Override
   protected void onRestart() {
     super.onRestart();
+    Singleton.getInstance().getAll().clear();
     reloadAdapter();
   }
+
 
   @Override
   public void tableOnClick(int index) {
     if (tableList.get(index).status == TableStatus.MY || tableList.get(index).status == TableStatus.FREE) {
+      Singleton.getInstance().saveTable(tableList.get(index));
       if (tableList.get(index).status == TableStatus.MY) {
+        Singleton.getInstance().saveZakazId(tableList.get(index).zakazId);
         OrderRegister register = RegisterController.getInstance().getOrderRegister();
         register.getOrders(Singleton.getInstance().getUser(), Singleton.getInstance().getTable(), productOrders -> Singleton.getInstance().addAllProduct(productOrders));
       }
-      Singleton.getInstance().saveTable(tableList.get(index));
       Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
       intent.putExtra("title", tableList.get(index).title);
       startActivity(intent);

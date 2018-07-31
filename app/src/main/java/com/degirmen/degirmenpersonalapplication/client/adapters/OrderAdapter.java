@@ -52,17 +52,13 @@ public class OrderAdapter extends ArrayAdapter<ProductOrder> {
 
   private void initOldProductOrderView(View convertView, ProductOrder productOrder) {
     final TextView nameTextView = convertView.findViewById(R.id.tvName);
-    final TextView priceTextView = convertView.findViewById(R.id.tvPrice);
     final TextView commentTextView = convertView.findViewById(R.id.tvComment);
     final TextView count = convertView.findViewById(R.id.tvCount);
 
     nameTextView.setText(productOrder.product.name);
-    priceTextView.setText(String.valueOf(productOrder.product.price));
     if (productOrder.comment != null && !productOrder.comment.isEmpty()) {
       commentTextView.setVisibility(View.VISIBLE);
       commentTextView.setText(productOrder.comment);
-    } else {
-      commentTextView.setVisibility(View.GONE);
     }
     count.setText(String.valueOf(productOrder.count));
   }

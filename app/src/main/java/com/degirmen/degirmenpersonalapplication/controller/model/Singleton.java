@@ -1,24 +1,17 @@
 package com.degirmen.degirmenpersonalapplication.controller.model;
 
 import android.content.Context;
-import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Singleton {
-  private static final String TAG = "Singleton";
-
+public class Singleton implements Serializable {
   private List<ProductOrder> notes;
   private User user;
   private Context context;
   private Table table;
-
-  public Integer counter = 0;
-
-  private Singleton() {
-    this.notes = new ArrayList<>();
-  }
+  private Integer zakazId;
 
   public Table getTable() {
     return table;
@@ -26,14 +19,6 @@ public class Singleton {
 
   public void saveTable(Table table) {
     this.table = table;
-  }
-
-  public static class SingletonHolder {
-    public static final Singleton HOLDER_INSTANCE = new Singleton();
-  }
-
-  public static Singleton getInstance() {
-    return SingletonHolder.HOLDER_INSTANCE;
   }
 
   public void addProduct(ProductOrder product) {
@@ -57,14 +42,20 @@ public class Singleton {
 
   public int contains(ProductOrder product) {
     for (int i = 0; i < getInstance().notes.size(); i++) {
-      Log.d(TAG, "contains: " + product.product.id + ",   " + getAll().get(i).product);
       boolean isContain = isEqual(product.product, getAll().get(i).product);
-      if (isContain) {
-        Log.d(Singleton.class.getName(), "contains: cool");
+      if (isContain && getAll().get(i).status != ProductOrderStatus.OLD) {
         return i;
       }
     }
     return -1;
+  }
+
+  public void saveZakazId(Integer zakazId) {
+    this.zakazId = zakazId;
+  }
+
+  public Integer getZakazId() {
+    return zakazId;
   }
 
   public void saveUser(User user) {
@@ -99,5 +90,41 @@ public class Singleton {
 
   public void saveContext(Context context) {
     this.context = context;
+  }
+
+
+//  public static class SingletonHolder {
+//    public static final Singleton HOLDER_INSTANCE = new Singleton();
+//  }
+//
+//  public static Singleton getInstance() {
+//    return SingletonHolder.HOLDER_INSTANCE;
+//  }
+
+
+  private static volatile Singleton sSoleInstance;
+
+  //private constructor.
+  private Singleton() {
+    this.notes = new ArrayList<>();
+    //Prevent form the reflection api.
+    if (sSoleInstance != null) {
+      throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
+    }
+  }
+
+  public static Singleton getInstance() {
+    if (sSoleInstance == null) { //if there is no instance available... create new one
+      synchronized (Singleton.class) {
+        if (sSoleInstance == null) sSoleInstance = new Singleton();
+      }
+    }
+
+    return sSoleInstance;
+  }
+
+  //Make singleton from serialize and deserialize operation.
+  protected Singleton readResolve() {
+    return getInstance();
   }
 }

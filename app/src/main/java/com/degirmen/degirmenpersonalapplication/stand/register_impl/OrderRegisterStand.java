@@ -16,8 +16,12 @@ import java.util.List;
 public class OrderRegisterStand extends Register implements OrderRegister {
 
   @Override
-  public void toOrder(Order order, User forUser, String table, Callback<Boolean> callback) {
-    async(() -> sleep());
+  public void toOrder(Order order, User forUser, String table, Integer zakazId, Callback<Boolean> callback) {
+    async(() ->
+    {
+      sleep();
+      callback.doSomething(true);
+    });
   }
 
   @Override

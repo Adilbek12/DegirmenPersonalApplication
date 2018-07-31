@@ -11,8 +11,10 @@ import com.degirmen.degirmenpersonalapplication.controller.model.UserCopy;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface JsonService {
@@ -65,6 +67,13 @@ public interface JsonService {
   Call<String> printCehck(
     @Query("command") String print_check,
     @Query("zakazid") Integer zakazId
+  );
+
+  @POST("/json/?command=saveproducts&zakazid={id}")
+  Call<String> saveProducts(
+    @Query("command") String saveproducts,
+    @Query("zakazid") String zakazid,
+    @Path("id") String zakazId
   );
 
 }

@@ -95,6 +95,7 @@ public class OptionFragment extends Fragment {
     if (getActivity() != null)
       getActivity().runOnUiThread(() -> {
         loading(false);
+        productOrders.clear();
         for (Product product : products)
           productOrders.add(new ProductOrder(product, 1, ProductOrderStatus.NEW));
         adapter.notifyDataSetChanged();
@@ -122,6 +123,7 @@ public class OptionFragment extends Fragment {
 
     String comment = Singleton.getInstance().getAll().get(position).comment;
 
+
     if (comment != null) {
       commentEditText.setText(comment);
       commentEditText.setSelection(commentEditText.getText().length());
@@ -130,11 +132,14 @@ public class OptionFragment extends Fragment {
     AlertDialog alertDialog = dialogBuilder.create();
 
     okButton.setOnClickListener(view -> {
-      if (!commentEditText.getText().toString().isEmpty()) {
+      String commentText = commentEditText.getText().toString();
+      if (commentText.isEmpty()) {
+        Singleton.getInstance().getAll().get(position).comment = null;
+      } else {
         Singleton.getInstance().getAll().get(position).comment = commentEditText.getText().toString();
-        adapter.notifyDataSetChanged();
-        alertDialog.dismiss();
       }
+      adapter.notifyDataSetChanged();
+      alertDialog.dismiss();
     });
 
     cancelButton.setOnClickListener(view -> alertDialog.cancel());

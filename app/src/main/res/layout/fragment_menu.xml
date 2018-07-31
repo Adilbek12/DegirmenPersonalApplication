@@ -3,6 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@color/backgroundColor"
   tools:context=".client.fragments.MenuFragment">
 
 
@@ -19,5 +20,6 @@
       android:layout_height="match_parent" />
 
   </LinearLayout>
-  <include layout="@layout/snippet_progress_bar"/>
+
+  <include layout="@layout/snippet_progress_bar" />
 </RelativeLayout>

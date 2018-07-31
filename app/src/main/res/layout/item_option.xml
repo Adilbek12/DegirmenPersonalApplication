@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants">
+  android:descendantFocusability="blocksDescendants">
 
   <TextView
     android:id="@+id/tvName"
@@ -14,7 +14,7 @@
     android:layout_marginStart="20dp"
     android:layout_marginTop="12dp"
     android:text="Test"
-    android:textColor="@color/colorPrimaryDark"
+    android:textColor="@color/colorPrimary"
     android:textSize="18sp"
     android:textStyle="bold"
     app:layout_constraintBottom_toBottomOf="@id/tvPrice"
@@ -31,7 +31,7 @@
     android:layout_marginStart="20dp"
     android:paddingBottom="10dp"
     android:text="300$"
-    android:textColor="@color/colorPrimaryDark"
+    android:textColor="@color/colorPrimary"
     android:textSize="16sp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -46,40 +46,37 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toStartOf="@id/buttonAdd"
     app:layout_constraintTop_toTopOf="parent"
-    app:stepper_background="@color/colorPrimaryDark"
-      />
+    app:stepper_contentTextColor="@color/white" />
 
   <ImageButton
     android:id="@+id/buttonAdd"
     android:layout_width="50dp"
     android:layout_height="50dp"
-      android:tag="add"
     android:layout_marginEnd="8dp"
     android:background="@null"
     android:scaleType="centerCrop"
     android:src="@drawable/ic_add"
+    android:tag="add"
     android:text="300$"
-    android:textColor="#000"
     android:textSize="18sp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
-      android:id="@+id/tvComment"
-      app:layout_constraintTop_toBottomOf="@id/tvPrice"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      android:textColor="@color/black"
-      android:textStyle="italic"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:paddingBottom="10dp"
-      android:visibility="gone"
-      android:layout_marginStart="20dp"
-      android:layout_marginEnd="20dp"
-      android:textSize="16sp"
-      />
+    android:id="@+id/tvComment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="20dp"
+    android:layout_marginStart="20dp"
+    android:paddingBottom="10dp"
+    android:textColor="@color/textColor"
+    android:textSize="16sp"
+    android:textStyle="italic"
+    android:visibility="gone"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tvPrice" />
 
 
 </android.support.constraint.ConstraintLayout>

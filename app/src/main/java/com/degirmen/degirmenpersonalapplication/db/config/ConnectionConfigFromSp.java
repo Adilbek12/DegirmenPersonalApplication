@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 
-public class ConnectionConfigFromSp implements ConnectionConfig {
+public class ConnectionConfigFromSp implements ConnectionConfigFactory {
 
   @Override
   public String host() {
@@ -28,9 +28,12 @@ public class ConnectionConfigFromSp implements ConnectionConfig {
   }
 
   @Override
-  public void setConfig(String host) {
+  public void setConfig(ConnectionConfig config) {
     SharedPreferences.Editor editor = getSharedPreferences().edit();
-    editor.putString("HOST", host);
+    editor.putString("HOST", config.host());
+    editor.putString("PORT", config.port());
+    editor.putString("USER", config.user());
+    editor.putString("PASSWORD", config.password());
     editor.apply();
   }
 

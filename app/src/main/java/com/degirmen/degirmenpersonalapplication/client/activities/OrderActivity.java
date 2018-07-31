@@ -11,17 +11,16 @@ import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bigkoo.snappingstepper.SnappingStepper;
 import com.degirmen.degirmenpersonalapplication.R;
 import com.degirmen.degirmenpersonalapplication.client.adapters.OrderAdapter;
 import com.degirmen.degirmenpersonalapplication.controller.controller.RegisterController;
 import com.degirmen.degirmenpersonalapplication.controller.model.Order;
+import com.degirmen.degirmenpersonalapplication.controller.model.ProductOrderStatus;
 import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 
 public class OrderActivity extends AppCompatActivity implements OrderAdapter.OnRemoveListener {
@@ -59,7 +58,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAdapter.OnR
   private void alertOnClickPositiveButton(DialogInterface dialog) {
     String table = Singleton.getInstance().getTable().title;
     Order order = new Order(Singleton.getInstance().getAllNew(), Singleton.getInstance().getTable().title);
-    RegisterController.getInstance().getOrderRegister().toOrder(order, Singleton.getInstance().getUser(), table, success -> {
+    RegisterController.getInstance().getOrderRegister().toOrder(order, Singleton.getInstance().getUser(), table, Singleton.getInstance().getZakazId(), zakazId -> {
       finish();
       Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -75,28 +74,17 @@ public class OrderActivity extends AppCompatActivity implements OrderAdapter.OnR
     adapter.onRemoveListener = this;
     listView.setAdapter(adapter);
 
-    listView.setOnItemClickListener(listOnItemClickListener());
-
     listView.setOnItemLongClickListener((adapterView, view, i, l) -> {
-      showCommentAlert(i);
+      if (adapter.getItem(i).status == ProductOrderStatus.NEW) showCommentAlert(i);
       return true;
     });
-  }
-
-  private AdapterView.OnItemClickListener listOnItemClickListener() {
-    return (adapterView, view, i, l) -> {
-      SnappingStepper stepper = view.findViewById(R.id.stepper);
-      int value = stepper.getValue() + 1;
-      stepper.setValue(value);
-      Singleton.getInstance().getAll().get(i).count = value;
-    };
   }
 
   private void initToolbar() {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    setDisplayHomeAsUpEnabled();
-    toolbar.setNavigationOnClickListener(v -> finish());
+//    setDisplayHomeAsUpEnabled();
+//    toolbar.setNavigationOnClickListener(v -> finish());
   }
 
   private void setDisplayHomeAsUpEnabled() {

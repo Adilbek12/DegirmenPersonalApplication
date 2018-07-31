@@ -50,11 +50,10 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.Holder> {
     switch (tables.get(i).status) {
       case MY:
         holder.tableButton.setBackgroundResource(R.drawable.my_table_background);
-
         break;
       case FOREIGN:
+        holder.tableButton.setText(tables.get(i).title+'\n'+tables.get(i).userName);
         holder.tableButton.setBackgroundResource(R.drawable.foreign_table_background);
-
         break;
       case FREE:
         holder.tableButton.setBackgroundResource(R.drawable.free_table_background);

@@ -78,7 +78,9 @@ public class OptionAdapter extends ArrayAdapter<ProductOrder> {
 
     int index = Singleton.getInstance().contains(productOrder);
 
+
     if (index != -1) {
+
       toRemoveButton(button);
 
       ProductOrder fromSingleton = Singleton.getInstance().getAll().get(index);
@@ -89,10 +91,13 @@ public class OptionAdapter extends ArrayAdapter<ProductOrder> {
         commentTextView.setVisibility(View.VISIBLE);
         commentTextView.setText(comment);
       }
-    } else toAddButton(button);
+    } else {
+      toAddButton(button);
+    }
 
     snappingStepper.setOnValueChangeListener(snapperOnValueChangeListener(productOrder, button));
     button.setOnClickListener(onClickAddButton(snappingStepper, productOrder));
+
   }
 
   private String getPrice(Integer price) {

@@ -19,13 +19,10 @@ import com.degirmen.degirmenpersonalapplication.controller.model.Singleton;
 import com.degirmen.degirmenpersonalapplication.controller.model.User;
 import com.degirmen.degirmenpersonalapplication.controller.register.AuthRegister;
 
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginActivity extends AppCompatActivity implements KeyboardVisibilityEventListener {
+public class LoginActivity extends AppCompatActivity {
 
   private AutoCompleteTextView nameAuthCompleteTextView;
   private EditText passwordEditText;
@@ -50,8 +47,6 @@ public class LoginActivity extends AppCompatActivity implements KeyboardVisibili
     Singleton.getInstance().saveContext(getApplicationContext());
 
     userRegister = RegisterController.getInstance().getAuthRegister();
-
-    KeyboardVisibilityEvent.setEventListener(this, this);
 
     darkView = findViewById(R.id.darkView);
     progressBar = findViewById(R.id.progressBar);
@@ -145,8 +140,5 @@ public class LoginActivity extends AppCompatActivity implements KeyboardVisibili
     Toast.makeText(getApplicationContext(),
       "Неправильный пользователь или пароль!", Toast.LENGTH_SHORT).show();
   }
-
-  @Override
-  public void onVisibilityChanged(boolean isOpen) {}
 }
 

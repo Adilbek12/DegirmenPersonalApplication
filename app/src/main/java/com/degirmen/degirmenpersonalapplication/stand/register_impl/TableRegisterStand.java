@@ -20,14 +20,14 @@ public class TableRegisterStand extends Register implements TableRegister {
 
   private List<Table> getTableList() {
     List<Table> tables = new ArrayList<>();
-    tables.add(new Table(TableStatus.MY, "1"));
-    tables.add(new Table(TableStatus.FOREIGN, "2"));
-    tables.add(new Table(TableStatus.FREE, "3"));
-    tables.add(new Table(TableStatus.FREE, "4"));
-    tables.add(new Table(TableStatus.FREE, "5"));
-    tables.add(new Table(TableStatus.FREE, "6"));
-    tables.add(new Table(TableStatus.FOREIGN, "7"));
-    tables.add(new Table(TableStatus.MY, "8"));
+    tables.add(new Table(TableStatus.MY, "1", "Test"));
+    tables.add(new Table(TableStatus.FOREIGN, "2", "Test"));
+    tables.add(new Table(TableStatus.FREE, "3", "Test"));
+    tables.add(new Table(TableStatus.FREE, "4", "Test"));
+    tables.add(new Table(TableStatus.FREE, "5", "test"));
+    tables.add(new Table(TableStatus.FREE, "6", "test"));
+    tables.add(new Table(TableStatus.FOREIGN, "7", "test"));
+    tables.add(new Table(TableStatus.MY, "8", "test"));
     return tables;
   }
 }
