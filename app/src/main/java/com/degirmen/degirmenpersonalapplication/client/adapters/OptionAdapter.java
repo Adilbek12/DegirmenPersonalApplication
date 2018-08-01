@@ -109,8 +109,10 @@ public class OptionAdapter extends ArrayAdapter<ProductOrder> {
       int index = Singleton.getInstance().contains(productOrder);
       if (index != -1) Singleton.getInstance().getAll().get(index).count = value;
       if (value <= 0) {
-        Singleton.getInstance().getAll().remove(index);
-        toAddButton(button);
+        if (index != -1) {
+          Singleton.getInstance().getAll().remove(index);
+          toAddButton(button);
+        }
       }
     };
   }

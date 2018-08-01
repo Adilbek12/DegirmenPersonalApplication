@@ -51,7 +51,9 @@ public class MainMenuActivity extends AppCompatActivity implements TableAdapter.
     RegisterController.getInstance().getTableRegister().getTableList(tableList ->
       runOnUiThread(() -> {
         this.tableList = tableList;
-        adapter.notifyDataSetChanged();
+        adapter = new TableAdapter(this, this.tableList);
+        adapter.tableOnClickListener = this;
+        tableRecyclerView.setAdapter(adapter);
       })
     );
   }

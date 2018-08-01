@@ -110,7 +110,7 @@
         android:background="@drawable/rounded_edit_text"
         android:backgroundTint="#f0f0f0"
         android:digits="0123456789."
-        android:inputType="numberDecimal"
+        android:inputType="text"
         android:padding="10dp" />
 
     </TableRow>
